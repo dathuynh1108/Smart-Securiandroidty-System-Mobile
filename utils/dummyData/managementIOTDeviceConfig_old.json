@@ -1,0 +1,13 @@
+[
+  {"id": 1, "name": "1 Configuration Cảm biến mở cửa",      "zone": 64, "status": "used", "event_name": "Đột nhập mở cửa", "iot_type": "door_sensor"},
+  {"id": 2, "name": "2 Configuration Cảm biến báo cháy",    "zone": 63, "status": "used", "event_name": "Cháy nhà", "iot_type": "fire_sensor"},
+  {"id": 3, "name": "3 Configuration Cảm biến mở cửa",      "zone": 62, "status": "used", "event_name": "Mở cửa nhà tắm", "iot_type": "door_sensor"},
+  {"id": 4, "name": "4 Configuration Cảm biến chuyển động", "zone": 61, "status": "used", "event_name": "Chuyển động sân", "iot_type": "motion_sensor"},
+  {"id": 5, "name": "5 Configuration Cảm biến báo cháy",    "zone": 60, "status": "free", "event_name": "Cháy tầng lầu", "iot_type": "fire_sensor"},
+  {"id": 6, "name": "6 Configuration Cảm biến mở cửa",      "zone": 59, "status": "free", "event_name": "Mở cửa bếp", "iot_type": "door_sensor"},
+  {"id": 7, "name": "7 Configuration Cảm biến chuyển động", "zone": 58, "status": "free", "event_name": "Chuyển động khách", "iot_type": "motion_sensor"},
+
+  {"id": 8,   "name": "8 Configuration Cảm biến mở cửa",        "zone": 57, "status": "free", "event_name": "Mở cửa gác", "iot_type": "door_sensor"},
+  {"id": 9,   "name": "9 Configuration Cảm biến chuyển động",   "zone": 56, "status": "free", "event_name": "Chuyển động ở gác", "iot_type": "motion_sensor"},
+  {"id": 11,  "name": "9 Configuration Cảm biến mở cửa",        "zone": 55, "status": "free", "event_name": "Mở cửa hầm xe", "iot_type": "door_sensor"}
+]

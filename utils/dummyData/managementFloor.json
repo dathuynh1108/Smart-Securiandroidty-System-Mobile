@@ -1,0 +1,8 @@
+[
+  {"id": 1000, "floor_level": 1, "name": "Tầng 1", "building_id": 10, "type": "floor", "lat": 25, "lng": -42, "url": "https://wpmedia.roomsketcher.com/content/uploads/2021/12/07133333/RoomSketcher-High-Quality-3D-Floor-Plans.jpg"},
+  {"id": 2000, "floor_level": 2, "name": "Tầng 2", "building_id": 10, "type": "floor", "lat": 25, "lng": -45, "url": "https://wpmedia.roomsketcher.com/content/uploads/2021/12/14154723/RoomSketcher-Home-Designer-Custom-3D-Floor-Plan.jpg"},
+  {"id": 3000, "floor_level": 3, "name": "Tầng 3", "building_id": 10, "type": "floor", "lat": 25, "lng": -49, "url": "https://www.livehome3d.com/assets/img/landing/floorplanner-app/floor-plans-from-scratch.png"},
+  {"id": 4000, "floor_level": 4, "name": "Tầng 4", "building_id": 10, "type": "floor", "lat": 25, "lng": -52, "url": "https://images.younghouselove.com/2013/05/Floor-Plan-1.jpg"},
+  {"id": 5000, "floor_level": 1, "name": "Tầng 1", "building_id": 20, "type": "floor", "lat": 25, "lng": -56, "url": "https://images.homify.com/c_fill,f_auto,q_0,w_740/v1539515545/p/photo/image/2748350/3d_floor_plan.jpg"},
+  {"id": 6000, "floor_level": 2, "name": "Tầng 2", "building_id": 20, "type": "floor", "lat": 25, "lng": -60 , "url": "https://cdn.shopify.com/s/files/1/1142/1104/products/7092-First-Floor_M_1200x.jpg?v=1637289603"}
+]

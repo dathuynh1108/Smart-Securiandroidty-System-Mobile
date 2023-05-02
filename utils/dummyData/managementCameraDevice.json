@@ -1,0 +1,13 @@
+[
+  {"id": 1, "name": "Camera PTZ nhà khách A 1",   "building_id": 10, "floor_level": 1, "lat": 25, "lng": -45, "type": "camera", "address": "Địa chỉ camera trong nhà 1", "observe_iot": "100", "connect_camera": "1"},
+  {"id": 2, "name": "Camera normal nhà ăn A 2",   "building_id": 10, "floor_level": 1, "lat": 25, "lng": -49, "type": "camera", "address": "Địa chỉ camera trong nhà 2", "observe_iot": "200", "connect_camera": "2"},
+  {"id": 3, "name": "Camera PTZ nhà khách A 2",   "building_id": 10, "floor_level": 2, "lat": 25, "lng": -54, "type": "camera", "address": "Địa chỉ camera trong nhà 3", "observe_iot": "300", "connect_camera": "3"},
+  {"id": 4, "name": "Camera PTZ nhà khách A 3 1", "building_id": 10, "floor_level": 3, "lat": 25, "lng": -59, "type": "camera", "address": "Địa chỉ camera trong nhà 4", "observe_iot": "400", "connect_camera": "4"},
+  {"id": 5, "name": "Camera PTZ nhà khách A 3 2", "building_id": 10, "floor_level": 3, "lat": 25, "lng": -63, "type": "camera", "address": "Địa chỉ camera trong nhà 5", "observe_iot": "", "connect_camera": ""},
+  {"id": 6, "name": "Camera PTZ nhà khách B 1",   "building_id": 20, "floor_level": 1, "lat": 25, "lng": -67, "type": "camera", "address": "Địa chỉ camera trong nhà 6", "observe_iot": "", "connect_camera": ""},
+  {"id": 7, "name": "Camera PTZ nhà khách B 2",   "building_id": 20, "floor_level": 2, "lat": 25, "lng": -68, "type": "camera", "address": "Địa chỉ camera trong nhà 7", "observe_iot": "", "connect_camera": ""},
+
+  {"id": 8, "name": "Camera không thuộc tầng A 1", "building_id": 10, "floor_level": -1, "lat": 23, "lng": -40, "type": "camera", "address": "Địa chỉ camera trong nhà 8",  "observe_iot": "","connect_camera": ""},
+  {"id": 9, "name": "Camera không thuộc tầng B 2", "building_id": 20, "floor_level": -1, "lat": 30, "lng": -45, "type": "camera", "address": "Địa chỉ camera trong nhà 9",  "observe_iot": "","connect_camera": ""},
+  {"id": 11, "name": "Camera không thuộc tầng B 3", "building_id": 20, "floor_level": -1, "lat":10, "lng": -50, "type": "camera", "address": "Địa chỉ camera trong nhà 10", "observe_iot": "","connect_camera": ""}
+]

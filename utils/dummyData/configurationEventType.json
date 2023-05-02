@@ -1,0 +1,4 @@
+[
+  {"id": 1, "key": 1, "event_name": "Sự kiện báo cháy", "description": "mô tả cho sự kiện báo cháy"},
+  {"id": 2, "key": 2, "event_name": "Sự kiện chuyển động", "description": "mô tả cho sự kiện chuyển động"}
+]

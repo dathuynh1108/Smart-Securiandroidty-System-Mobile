@@ -1,0 +1,8 @@
+[
+  {"key": 1, "id": 1, "fullname": "Võ Nguyễn Thiện Nhân", "username":  "nhanvo03102001", "password": "123456", "role": "Level 1"},
+  {"key": 2, "id": 2, "fullname": "Võ Nguyễn Thiện Nhân", "username":  "dathuynh03102001", "password": "123456", "role": "Level 2"},
+  {"key": 3, "id": 3, "fullname": "Võ Nguyễn Thiện Nhân", "username":  "huyle03102001", "password": "123456", "role": "Level 3"},
+  {"key": 4, "id": 4, "fullname": "Võ Nguyễn Thiện Nhân", "username":  "minhnhan03102001", "password": "123456", "role": "Level 3"},
+  {"key": 5, "id": 5, "fullname": "Võ Nguyễn Thiện Nhân", "username":  "thiennhan03102001", "password": "123456", "role": "Level 1"},
+  {"key": 6, "id": 6, "fullname": "Võ Nguyễn Thiện Nhân", "username":  "nguyennhan03102001", "password": "123456", "role": "Level 2"}
+]

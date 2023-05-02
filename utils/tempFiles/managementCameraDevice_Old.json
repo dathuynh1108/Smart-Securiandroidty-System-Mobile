@@ -1,0 +1,13 @@
+[
+  {"id": 1, "name": "Camera PTZ nhà khách tòa A tầng 1", "building_id": 10, "floor_level": 1, "lat": 10.762622, "lng": 106.660172, "type": "camera", "address": "Camera trong nhà 1"},
+  {"id": 2, "name": "Camera normal nhà ăn tòa A tầng 2", "building_id": 10, "floor_level": 1, "lat": 10.772622, "lng": 106.670172, "type": "camera", "address": "Camera trong nhà 2"},
+  {"id": 3, "name": "Camera PTZ nhà khách tòa A tầng 2", "building_id": 10, "floor_level": 2, "lat": 10.782622, "lng": 106.680172, "type": "camera", "address": "Camera trong nhà 3"},
+  {"id": 4, "name": "Camera PTZ nhà khách tòa A tầng 3", "building_id": 10, "floor_level": 3, "lat": 10.792622, "lng": 106.690172, "type": "camera", "address": "Camera trong nhà 4"},
+  {"id": 5, "name": "Camera PTZ nhà khách tòa A tầng 3", "building_id": 10, "floor_level": 3, "lat": 10.732622, "lng": 106.640172, "type": "camera", "address": "Camera trong nhà 5"},
+  {"id": 6, "name": "Camera PTZ nhà khách tòa B tầng 1", "building_id": 20, "floor_level": 1, "lat": 10.712622, "lng": 106.630172, "type": "camera", "address": "Camera trong nhà 6"},
+  {"id": 7, "name": "Camera PTZ nhà khách tòa B tầng 2", "building_id": 20, "floor_level": 2, "lat": 10.702622, "lng": 106.620172, "type": "camera", "address": "Camera trong nhà 7"},
+
+  {"id": 8, "name": "Camera không thuộc tầng tòa A 1", "building_id": 10, "floor_level": -1, "lat": 10.722622, "lng": 106.620172, "type": "camera", "address": "Camera trong nhà 8"},
+  {"id": 9, "name": "Camera không thuộc tầng tòa B 2", "building_id": 20, "floor_level": -1, "lat": 10.732622, "lng": 106.630172, "type": "camera", "address": "Camera trong nhà 9"},
+  {"id": 11, "name": "Camera không thuộc tầng tòa B 3", "building_id": 20, "floor_level": -1, "lat":10.742622, "lng": 106.640172, "type": "camera", "address": "Camera trong nhà 10"}
+]

@@ -1,0 +1,7 @@
+[
+  {"id" :  1, "key": 1, "iot_type_name":  "Báo cháy",    "image_url": "https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/31EQY4xJluL._SX355_.jpg", "description":  "no description for báo cháy"},
+  {"id" :  2, "key": 2, "iot_type_name":  "Chuyển động", "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkMKrZpHCF4kVwM9aUF05X8CBwTKeJuC4X6A&usqp=CAU", "description":  "no description for báo chuyển động"},
+  {"id" :  3, "key": 3, "iot_type_name":  "Trộm", "image_url": "https://res.cloudinary.com/rsc/image/upload/b_rgb:FFFFFF,c_pad,dpr_1.0,f_auto,h_758,q_auto,w_1350/c_pad,h_758,w_1350/F1845615-01?pgw=1&pgwact=1", "description":  "no description for báo chuyển động"},
+  {"id" :  4, "key": 4, "iot_type_name":  "Lãng vãng", "image_url": "https://cdn.sick.com/media/895/8/78/078/IM0094078.png", "description":  "no description for báo chuyển động"},
+  {"id" :  5, "key": 5, "iot_type_name":  "Đám đông", "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVEdkU7V7lI-pa2dbgoBUJaPvsFHkhA6Edeg&usqp=CAU", "description":  "no description for báo chuyển động"}
+]

@@ -1,0 +1,12 @@
+[
+    {"id": 1, "name": "1 Configuration Cảm biến mở cửa",         "created_at": "2022-10-07T06:58:22.675Z", "zone": 64, "status": "used", "connect_event_type": "1", "connect_iot_type": "1", "key": 1},
+    {"id": 2, "name": "2 Configuration Cảm biến báo cháy",       "created_at": "2022-10-07T06:58:22.675Z", "zone": 63, "status": "used", "connect_event_type": "2", "connect_iot_type": "2", "key": 2},
+    {"id": 3, "name": "3 Configuration Cảm biến mở cửa",         "created_at": "2022-10-07T06:58:22.675Z", "zone": 62, "status": "used", "connect_event_type": "2", "connect_iot_type": "2", "key": 3},
+    {"id": 4, "name": "4 Configuration Cảm biến chuyển động",    "created_at": "2022-10-07T06:58:22.675Z", "zone": 61, "status": "used", "connect_event_type": "1", "connect_iot_type": "1", "key": 4},
+    {"id": 5, "name": "5 Configuration Cảm biến báo cháy",       "created_at": "2022-10-07T06:58:22.675Z", "zone": 60, "status": "free", "connect_event_type": "1", "connect_iot_type": "1", "key": 5},
+    {"id": 6, "name": "6 Configuration Cảm biến mở cửa",         "created_at": "2022-10-07T06:58:22.675Z", "zone": 59, "status": "free", "connect_event_type": "1", "connect_iot_type": "1", "key": 6},
+    {"id": 7, "name": "7 Configuration Cảm biến chuyển động",    "created_at": "2022-10-07T06:58:22.675Z", "zone": 58, "status": "free", "connect_event_type": "1", "connect_iot_type": "1", "key": 7},
+    {"id": 8,   "name": "8 Configuration Cảm biến mở cửa",       "created_at": "2022-10-07T06:58:22.675Z", "zone": 57, "status": "free", "connect_event_type": "1", "connect_iot_type": "1", "key": 8},
+    {"id": 9,   "name": "9 Configuration Cảm biến chuyển động",  "created_at": "2022-10-07T06:58:22.675Z", "zone": 56, "status": "free", "connect_event_type": "1", "connect_iot_type": "1", "key": 9},
+    {"id": 11,  "name": "9 Configuration Cảm biến mở cửa",       "created_at": "2022-10-07T06:58:22.675Z", "zone": 55, "status": "free", "connect_event_type": "1", "connect_iot_type": "1", "key": 11}
+  ]

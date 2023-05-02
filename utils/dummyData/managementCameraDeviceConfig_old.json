@@ -1,0 +1,24 @@
+[
+  {"id": 1, "name": "Camera 1910400 config 1", "type": "camera", "status": "used", "pixels": "1920x1080", "video_url": "https://autojobs.co/danh-gia/truong-dai-hoc-bach-khoa-tp-ho-chi-minh-hcmut.2/cover-image" , "camera_type": "Normal"},
+  {"id": 2, "name": "Camera 1910401 config 2", "type": "camera", "status": "used", "pixels": "1920x1080", "video_url": "https://thamhiemmekong.com/wp-content/uploads/2020/06/thanh-pho-ha-tien.jpg" , "camera_type": "Normal"},
+  {"id": 3, "name": "Camera 1910402 config 3", "type": "camera", "status": "used", "pixels": "1920x1080", "video_url": "https://nld.mediacdn.vn/2018/11/3/bai-tam-tai-khu-du-lich-mui-nai-crop-15412172499521865482984.jpg" , "camera_type": "PTZ"},
+  {"id": 4, "name": "Camera 1910403 config 4", "type": "camera", "status": "used", "pixels": "1920x1080", "video_url": "https://vcdn1-vnexpress.vnecdn.net/2022/11/17/Ve-may-bay-di-sai-gon-600x399-4356-2813-1668672299.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=8All1Mq-so56XkVbZXvdFA" , "camera_type": "Normal"},
+  {"id": 6, "name": "Camera 1910405 config 5", "type": "camera", "status": "free", "pixels": "1920x1080", "video_url": "https://thamhiemmekong.com/wp-content/uploads/2020/06/bienmuinai-ha-tien.jpg" , "camera_type": "PTZ"},
+  {"id": 5, "name": "Camera 1910404 config 6", "type": "camera", "status": "free", "pixels": "1920x1080", "video_url": "https://datviettour.com.vn/uploads/images/mien-tay/kien-giang/danh-thang/hon-phu-tu-ha-tien.jpg" , "camera_type": "PTZ"},
+  {"id": 7, "name": "Camera 1910406 config 7", "type": "camera", "status": "free", "pixels": "1920x1080", "video_url": "https://2trip.vn/wp-content/uploads/2020/08/ha-tien-kien-giang-6.jpg" , "camera_type": "PTZ"},
+
+  {"id": 8, "name": "Camera 1910407 config 8",      "status": "free", "video_url": "https://www.vietnambooking.com/wp-content/uploads/2021/01/dia-diem-du-lich-ha-tien-1.jpg", "camera_type": "Normal"},
+  {"id": 9, "name": "Camera 1910408 config 9",      "status": "free", "video_url": "https://hatienvegas.com/wp-content/uploads/2020/03/Hatien-Vegas-Ha-Tien-City-Night.jpg", "camera_type": "Normal"},
+  {"id": 11, "name": "Camera 1910409 config 11",    "status": "free", "video_url": "https://i.ytimg.com/vi/OwWDgbjY4rw/maxresdefault.jpg", "camera_type": "PTZ"},
+  {"id": 1, "name": "Camera 1910400 config 1", "type": "camera", "status": "used", "pixels": "1920x1080", "video_url": "https://autojobs.co/danh-gia/truong-dai-hoc-bach-khoa-tp-ho-chi-minh-hcmut.2/cover-image" , "camera_type": "Normal"},
+  {"id": 2, "name": "Camera 1910401 config 2", "type": "camera", "status": "used", "pixels": "1920x1080", "video_url": "https://thamhiemmekong.com/wp-content/uploads/2020/06/thanh-pho-ha-tien.jpg" , "camera_type": "Normal"},
+  {"id": 3, "name": "Camera 1910402 config 3", "type": "camera", "status": "used", "pixels": "1920x1080", "video_url": "https://nld.mediacdn.vn/2018/11/3/bai-tam-tai-khu-du-lich-mui-nai-crop-15412172499521865482984.jpg" , "camera_type": "PTZ"},
+  {"id": 4, "name": "Camera 1910403 config 4", "type": "camera", "status": "used", "pixels": "1920x1080", "video_url": "https://vcdn1-vnexpress.vnecdn.net/2022/11/17/Ve-may-bay-di-sai-gon-600x399-4356-2813-1668672299.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=8All1Mq-so56XkVbZXvdFA" , "camera_type": "Normal"},
+  {"id": 6, "name": "Camera 1910405 config 5", "type": "camera", "status": "free", "pixels": "1920x1080", "video_url": "https://thamhiemmekong.com/wp-content/uploads/2020/06/bienmuinai-ha-tien.jpg" , "camera_type": "PTZ"},
+  {"id": 5, "name": "Camera 1910404 config 6", "type": "camera", "status": "free", "pixels": "1920x1080", "video_url": "https://datviettour.com.vn/uploads/images/mien-tay/kien-giang/danh-thang/hon-phu-tu-ha-tien.jpg" , "camera_type": "PTZ"},
+  {"id": 7, "name": "Camera 1910406 config 7", "type": "camera", "status": "free", "pixels": "1920x1080", "video_url": "https://2trip.vn/wp-content/uploads/2020/08/ha-tien-kien-giang-6.jpg" , "camera_type": "PTZ"},
+
+  {"id": 8, "name": "Camera 1910407 config 8",      "status": "free", "video_url": "https://www.vietnambooking.com/wp-content/uploads/2021/01/dia-diem-du-lich-ha-tien-1.jpg", "camera_type": "Normal"},
+  {"id": 9, "name": "Camera 1910408 config 9",      "status": "free", "video_url": "https://hatienvegas.com/wp-content/uploads/2020/03/Hatien-Vegas-Ha-Tien-City-Night.jpg", "camera_type": "Normal"},
+  {"id": 11, "name": "Camera 1910409 config 11",    "status": "free", "video_url": "https://i.ytimg.com/vi/OwWDgbjY4rw/maxresdefault.jpg", "camera_type": "PTZ"}
+]

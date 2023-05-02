@@ -1,0 +1,13 @@
+[
+  {"id": 100, "name": "1 Cảm biến mở cửa",      "building_id": 10, "floor_level": 1, "lat": 25, "lng": -45, "type": "iot", "observed_status": "used", "connect_iot": "1", "address": "Địa chỉ cảm biến trong nhà 1"},
+  {"id": 200, "name": "2 Cảm biến báo cháy",    "building_id": 10, "floor_level": 1, "lat": 25, "lng": -49, "type": "iot", "observed_status": "used", "connect_iot": "2", "address": "Địa chỉ cảm biến trong nhà 2"},
+  {"id": 300, "name": "3 Cảm biến mở cửa",      "building_id": 10, "floor_level": 2, "lat": 25, "lng": -54, "type": "iot", "observed_status": "used", "connect_iot": "3", "address": "Địa chỉ cảm biến trong nhà 3"},
+  {"id": 400, "name": "4 Cảm biến chuyển động", "building_id": 10, "floor_level": 3, "lat": 25, "lng": -59, "type": "iot", "observed_status": "used", "connect_iot": "4", "address": "Địa chỉ cảm biến trong nhà 4"},
+  {"id": 500, "name": "5 Cảm biến báo cháy",    "building_id": 10, "floor_level": 3, "lat": 25, "lng": -63, "type": "iot", "observed_status": "free", "connect_iot": "",  "address": "Địa chỉ cảm biến trong nhà 5"},
+  {"id": 600, "name": "6 Cảm biến mở cửa",      "building_id": 20, "floor_level": 1, "lat": 25, "lng": -67, "type": "iot", "observed_status": "free", "connect_iot": "",  "address": "Địa chỉ cảm biến trong nhà 6"},
+  {"id": 700, "name": "7 Cảm biến chuyển động", "building_id": 20, "floor_level": 2, "lat": 25, "lng": -68, "type": "iot", "observed_status": "free", "connect_iot": "",  "address": "Địa chỉ cảm biến trong nhà 7"},
+
+  {"id": 800,   "name": "8 Cảm biến mở cửa",        "building_id": 10, "floor_level": -1, "lat": 23, "lng": -40, "type": "iot", "observed_status": "free", "connect_iot": "", "address": "Địa chỉ cảm biến trong nhà 8"  },
+  {"id": 900,   "name": "9 Cảm biến chuyển động",   "building_id": 20, "floor_level": -1, "lat": 30, "lng": -45, "type": "iot", "observed_status": "free", "connect_iot": "", "address": "Địa chỉ cảm biến trong nhà 9" },
+  {"id": 110,   "name": "9 Cảm biến mở cửa",        "building_id": 20, "floor_level": -1, "lat": 10, "lng": -50, "type": "iot", "observed_status": "free", "connect_iot": "", "address": "Địa chỉ cảm biến trong nhà 10"}
+]

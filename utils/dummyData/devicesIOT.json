@@ -1,0 +1,7 @@
+[
+    {"key": 1, "id": 1, "deviceName": "Chuyển động phòng khách", "deviceType":  "Cảm biến chuyển động", "zone": 1, "time": "2022-10-07Z6:58:22.123Z"},
+    {"key": 2, "id": 2, "deviceName": "Chuyển động phòng tắm", "deviceType":  "Cảm biến phòng tắm", "zone": 2, "time": "2022-10-07Z6:58:22.123Z"},
+    {"key": 3, "id": 3, "deviceName": "Mở cửa phòng họp", "deviceType":  "Cảm biến mở cửa", "zone": 3, "time": "2022-10-07Z6:58:22.123Z"},
+    {"key": 4, "id": 4, "deviceName": "Mở cửa phòng họp", "deviceType":  "Cảm biến mở cửa", "zone": 3, "time": "2022-10-07Z6:58:22.123Z"},
+    {"key": 5, "id": 5, "deviceName": "Mở cửa phòng họp", "deviceType":  "Cảm biến mở cửa", "zone": 3, "time": "2022-10-07Z6:58:22.123Z"}
+]

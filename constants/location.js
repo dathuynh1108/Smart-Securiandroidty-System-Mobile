@@ -1,0 +1,1 @@
+export const HoChiMinh = [10.762622, 106.660172]
