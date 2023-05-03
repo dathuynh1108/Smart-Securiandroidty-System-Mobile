@@ -14,8 +14,9 @@ import {
   MediaStreamTrack, 
   mediaDevices, 
   permissions, 
+  registerGlobals,
 } from 'react-native-webrtc';
-
+registerGlobals();
 import {RTCSessionDescriptionInit} from "react-native-webrtc/lib/typescript/RTCSessionDescription"
 import RTCDataChannel from "react-native-webrtc/lib/typescript/RTCDataChannel";
 import RTCDataChannelEvent from "react-native-webrtc/lib/typescript/RTCDataChannelEvent"
@@ -63,13 +64,14 @@ export class Transport {
       this.pc.createDataChannel(API_CHANNEL);
     }
 
-    this.pc.addEventListener("icecandidate", (candidate:any) => {
-      if (candidate) {
-        this.signal.trickle({ target: role, candidate });
+    this.pc.addEventListener("icecandidate", (e:any) => {
+      if (e.candidate) {
+        this.signal.trickle({ target: role, candidate: e.candidate });
       }
     });
 
     this.pc.addEventListener("iceconnectionstatechange", async (e) => {
+      console.log(role, "iceconnectionstatechange", this.pc.iceConnectionState)
       // iOS iceConnectionState can go straight to "failed" without emitting "disconnected"
       if (this.pc.iceConnectionState === 'disconnected' || this.pc.iceConnectionState === 'failed') {
         if (this.pc.restartIce !== undefined) {
@@ -108,7 +110,6 @@ export default class Client {
       ],
     },
   ) {
-    console.log(signal)
     this.signal = signal;
     this.config = config;
 
@@ -154,14 +155,8 @@ export default class Client {
         }
       });
     });
-    let sessionConstraints = {
-      mandatory: {
-        OfferToReceiveAudio: true,
-        OfferToReceiveVideo: true,
-        VoiceActivityDetection: true
-      }
-    };
-    const offer = await this.transports[Role.pub].pc.createOffer(sessionConstraints);
+
+    const offer = await this.transports[Role.pub].pc.createOffer(null);
     await this.transports[Role.pub].pc.setLocalDescription(offer);
     const answer = await this.signal.join(sid, uid, offer);
     await this.transports[Role.pub].pc.setRemoteDescription(answer);
@@ -205,7 +200,7 @@ export default class Client {
 
   close() {
     if (this.transports) {
-      Object.values(this.transports).forEach((t) => t.pc.close());
+      Object.values(this.transports).forEach((t) => {t.pc.close(); t.pc = null as any;});
     }
     this.signal.close();
   }

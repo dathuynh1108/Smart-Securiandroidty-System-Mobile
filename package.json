@@ -17,7 +17,6 @@
         "@react-navigation/native-stack": "^6.9.12",
         "@reduxjs/toolkit": "^1.9.5",
         "@types/react-native-webrtc": "^1.75.5",
-        "@types/uuid": "^9.0.1",
         "axios": "^1.4.0",
         "eslint-config-airbnb": "^19.0.4",
         "react": "18.2.0",
@@ -35,11 +34,11 @@
         "react-native-svg": "^13.9.0",
         "react-native-tab-view": "^3.5.1",
         "react-native-tree-select": "^2.0.9",
+        "react-native-uuid": "^2.0.1",
         "react-native-vector-icons": "^9.2.0",
         "react-native-video": "^5.2.1",
         "react-native-webrtc": "^111.0.0",
-        "react-redux": "^8.0.5",
-        "uuid": "^9.0.0"
+        "react-redux": "^8.0.5"
     },
     "devDependencies": {
         "@babel/core": "^7.20.0",

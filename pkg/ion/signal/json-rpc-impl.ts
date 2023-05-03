@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+import uuid from 'react-native-uuid';
 import { Signal } from '.';
 import { Trickle } from '../client';
 import {RTCSessionDescriptionInit} from "react-native-webrtc/lib/typescript/RTCSessionDescription"
@@ -49,7 +49,7 @@ class IonSFUJSONRPCSignal implements Signal {
 
   // JsonRPC2 Call
   async call<T>(method: string, params: any): Promise<T> {
-    const id = uuidv4();
+    const id = uuid.v4();
     this.socket.send(
       JSON.stringify({
         method,
@@ -115,4 +115,4 @@ class IonSFUJSONRPCSignal implements Signal {
   }
 }
 
-export { IonSFUJSONRPCSignal };
+export { IonSFUJSONRPCSignal }

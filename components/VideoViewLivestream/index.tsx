@@ -1,18 +1,78 @@
-import React from 'react';
-import { Text } from "react-native";
-import { View } from "react-native";
-import {Client} from "../../package/ion"
-import {IonSFUJSONRPCSignal}  from "../../package/ion/signal/json-rpc-impl"
-import {v4 as uuidv4} from 'uuid';
-export interface Props {
-    roomName: string;
-}
-const VideoViewLivestream:React.FC<Props> = (props) => {
+import React, { useEffect, useRef, useState } from "react";
+import { View, Text } from 'react-native'
+import { Client } from "../../pkg/ion";
+import { IonSFUJSONRPCSignal } from "../../pkg/ion/signal/json-rpc-impl";
+import uuid from "react-native-uuid";
+import { styles } from './styles'
+import { sfuAddress } from "../../apis/configs/axiosConfig";
+import { RTCView, mediaDevices } from "react-native-webrtc";
+const config = {
+    sdpSemantics: 'unified-plan',
+    iceServers: [
+        {
+            urls: "stun:stun.l.google.com:19302",
+        },
+        {
+            urls: "stun:stun.stunprotocol.org:3478",
+        },
+    ],
+};
+
+const VideoView = ({navigation}) => {
+    const [remoteStream, setRemoteStream] = useState<any>(null);
+    const client = useRef<any>(null);
+    const signal = useRef<any>(null);
+    const connecting = useRef<boolean>(false);
+    const streams = useRef({});
+    const [message, setMessage] = useState("Connecting to camera...")
+
+    const roomName = "rtsp://tris.ddns.net:5564/Streaming/Channels/102?transportmode=unicast&profile=Profile_2";
+
+    useEffect(() => {
+        if (!connecting.current) {
+            signal.current = new IonSFUJSONRPCSignal(sfuAddress);
+            client.current = new Client(signal.current, config);
+            signal.current.onopen = () => client.current.join(roomName, uuid.v4());
+            client.current.ontrack = (track, stream) => {
+                console.log("got track:", track.id, "kind:", track.kind, "for stream:", stream.id);
+                if (!streams.current[stream.id]) {
+                    streams.current[stream.id] = stream;
+                    console.log("Set remote stream:", stream.toURL())
+                    setRemoteStream(stream);
+                }
+                track.onunmute = () => {
+                    console.log("Track unmuted:", track.id, "kind:", track.kind)
+                    if (track.kind === "audio") {
+                    } else {
+                        connecting.current = false;
+                        setMessage("")
+                    }
+                };
+            };
+            connecting.current = true;
+        }
+        return () => {
+            console.log("Closing video view")
+            if (client.current) {
+                client.current.close();
+                client.current = null;
+            }
+        }
+    }, []);
+
     return (
-        <View>
-            <Text>URL: Hello </Text>
-        </View>
+       <>
+       {message ? <Text>{message}</Text> :""}
+       {
+        remoteStream &&
+          <RTCView
+            streamURL={remoteStream.toURL()}
+            style={styles.stream} />
+      }
+      </>
     );
 }
 
-export default VideoViewLivestream;
+  
+
+export default React.memo(VideoView)
