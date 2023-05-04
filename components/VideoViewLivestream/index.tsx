@@ -5,7 +5,7 @@ import { IonSFUJSONRPCSignal } from "../../pkg/ion/signal/json-rpc-impl";
 import uuid from "react-native-uuid";
 import { styles } from './styles'
 import { sfuAddress } from "../../apis/configs/axiosConfig";
-import { RTCView, mediaDevices } from "react-native-webrtc";
+import { RTCView } from "react-native-webrtc";
 const config = {
     sdpSemantics: 'unified-plan',
     iceServers: [
@@ -27,9 +27,11 @@ const VideoView = ({navigation}) => {
     const [message, setMessage] = useState("Connecting to camera...")
 
     const roomName = useRef<string>("");
-    roomName.current = "rtsp://tris.ddns.net:5564/Streaming/Channels/102?transportmode=unicast&profile=Profile_2";
     useEffect(() => {
+        console.log("Use effect", connecting.current)
         if (!connecting.current) {
+            roomName.current = "rtsp://tris.ddns.net:5564/Streaming/Channels/102?transportmode=unicast&profile=Profile_2";
+            connecting.current = true;
             signal.current = new IonSFUJSONRPCSignal(sfuAddress);
             client.current = new Client(signal.current, config);
             signal.current.onopen = () => client.current.join(roomName.current, uuid.v4());
@@ -49,10 +51,9 @@ const VideoView = ({navigation}) => {
                     }
                 };
             };
-            connecting.current = true;
         }
         return () => {
-            console.log("Closing video view")
+            console.log("Closing video view!")
             if (client.current) {
                 client.current.close();
                 client.current = null;

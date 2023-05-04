@@ -71,12 +71,12 @@ export class Transport {
     });
 
     this.pc.addEventListener("iceconnectionstatechange", async (e) => {
-      console.log(role, "iceconnectionstatechange", this.pc.iceConnectionState)
+      console.log(role, "iceconnectionstatechange", this.pc?.iceConnectionState)
       // iOS iceConnectionState can go straight to "failed" without emitting "disconnected"
-      if (this.pc.iceConnectionState === 'disconnected' || this.pc.iceConnectionState === 'failed') {
-        if (this.pc.restartIce !== undefined) {
+      if (this.pc?.iceConnectionState === 'disconnected' || this.pc?.iceConnectionState === 'failed') {
+        if (this.pc?.restartIce !== undefined) {
           // this will trigger onNegotiationNeeded
-          this.pc.restartIce();
+          this.pc?.restartIce();
         }
       }
     });
