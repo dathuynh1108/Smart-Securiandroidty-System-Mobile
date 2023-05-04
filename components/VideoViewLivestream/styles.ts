@@ -4,13 +4,8 @@ const screenHeight = Dimensions.get("window").height;
 
 export const styles = StyleSheet.create({
     videoTag: {
-        maxWidth: screenWidth,
-        maxHeight: screenHeight,
-        borderRadius: 7,
+        height: screenHeight / 2,
     },
-    stream: {
-        flex: 1
-      },
     videoContainerConnect: {
     }
 });

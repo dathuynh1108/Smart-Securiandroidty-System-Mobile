@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
     monitorVideoContainer: {
-        margin: 5
+        margin: 5,
     },
 
     title: {
@@ -17,7 +17,8 @@ export const styles = StyleSheet.create({
         marginBottom: 35,
         marginLeft: 10,
         marginRight: 10,
-        borderRadius: 5
+        borderRadius: 5,
+        flex: 1,
     },
 
     bottomLine: {
@@ -27,13 +28,11 @@ export const styles = StyleSheet.create({
         borderWidth: 2,
     },
 
-    buildingAndFloorLeft: { paddingLeft: 10, paddingTop: 5 },
+    buildingAndFloorLeft: { paddingLeft: 10, paddingTop: 5, },
 
-    cameraNameLeft: { paddingLeft: 10, paddingTop: 5, marginBottom: 5 },
+    cameraNameLeft: { paddingLeft: 10, paddingTop: 5, marginBottom: 5, },
 
     titleBuildingAndFloor: {
         fontWeight: 'bold',
-    }
-
-
+    },
 });

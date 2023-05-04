@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, Text } from 'react-native'
+import { SafeAreaView, Text } from 'react-native'
 import { Client } from "../../pkg/ion";
 import { IonSFUJSONRPCSignal } from "../../pkg/ion/signal/json-rpc-impl";
 import uuid from "react-native-uuid";
@@ -17,8 +17,12 @@ const config = {
         },
     ],
 };
+export interface Props {
+    navigation: any;
+    roomName: string;
+}
 
-const VideoView = ({navigation}) => {
+const VideoView: React.FC<Props> = (props) => {
     const [remoteStream, setRemoteStream] = useState<any>(null);
     const client = useRef<any>(null);
     const signal = useRef<any>(null);
@@ -28,9 +32,15 @@ const VideoView = ({navigation}) => {
 
     const roomName = useRef<string>("");
     useEffect(() => {
-        console.log("Use effect", connecting.current)
-        if (!connecting.current) {
-            roomName.current = "rtsp://tris.ddns.net:5564/Streaming/Channels/102?transportmode=unicast&profile=Profile_2";
+        roomName.current = props.roomName ? props.roomName : "rtsp://tris.ddns.net:5564/Streaming/Channels/102?transportmode=unicast&profile=Profile_2";
+        const useEffectRoomName = roomName.current;
+        if (client.current) {
+            client.current.close();
+            client.current = null;
+        }
+
+        if (roomName.current && !connecting.current) {
+            console.log("Connecting to SFU room:", roomName.current);
             connecting.current = true;
             signal.current = new IonSFUJSONRPCSignal(sfuAddress);
             client.current = new Client(signal.current, config);
@@ -53,29 +63,33 @@ const VideoView = ({navigation}) => {
             };
         }
         return () => {
-            console.log("Closing video view!")
-            if (client.current) {
+            if (client.current && roomName.current === useEffectRoomName) {
+                console.log("Closing video view for room:", roomName.current);
                 client.current.close();
                 client.current = null;
-                streams.current = {};
                 roomName.current = "";
+                streams.current = {};
+
             }
-        }
-    }, []);
+        };
+    }, [props.roomName]);
 
     return (
-       <>
-       {message ? <Text>{message}</Text> :""}
-       {
-        remoteStream &&
-          <RTCView
-            streamURL={remoteStream.toURL()}
-            style={styles.stream} />
-      }
-      </>
+        <SafeAreaView>
+            {message ? <Text>{message}</Text> : ""}
+            {
+                remoteStream &&
+                <RTCView
+                    objectFit={"contain"}
+                    zOrder={20}
+                    streamURL={remoteStream.toURL()}
+                    style={styles.videoTag}
+                />
+            }
+        </SafeAreaView>
     );
 }
 
-  
+
 
 export default React.memo(VideoView)
