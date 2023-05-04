@@ -26,13 +26,13 @@ const VideoView = ({navigation}) => {
     const streams = useRef({});
     const [message, setMessage] = useState("Connecting to camera...")
 
-    const roomName = "rtsp://tris.ddns.net:5564/Streaming/Channels/102?transportmode=unicast&profile=Profile_2";
-
+    const roomName = useRef<string>("");
+    roomName.current = "rtsp://tris.ddns.net:5564/Streaming/Channels/102?transportmode=unicast&profile=Profile_2";
     useEffect(() => {
         if (!connecting.current) {
             signal.current = new IonSFUJSONRPCSignal(sfuAddress);
             client.current = new Client(signal.current, config);
-            signal.current.onopen = () => client.current.join(roomName, uuid.v4());
+            signal.current.onopen = () => client.current.join(roomName.current, uuid.v4());
             client.current.ontrack = (track, stream) => {
                 console.log("got track:", track.id, "kind:", track.kind, "for stream:", stream.id);
                 if (!streams.current[stream.id]) {
@@ -56,6 +56,8 @@ const VideoView = ({navigation}) => {
             if (client.current) {
                 client.current.close();
                 client.current = null;
+                streams.current = {};
+                roomName.current = "";
             }
         }
     }, []);
