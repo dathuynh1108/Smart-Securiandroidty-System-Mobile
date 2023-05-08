@@ -121,12 +121,16 @@ export const styles = StyleSheet.create({
         backgroundGradientFromOpacity: 21,
         backgroundGradientTo: "#08130D",
         backgroundGradientToOpacity: 0.5,
-        color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+        // color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+        color: (opacity = 1) => `dodgerblue`,
         strokeWidth: 2, // optional, default 3
         barPercentage: 0.5,
         useShadowColorFromDataset: false, // optional,
         propsForLabels: {
             fontSize: "10"
         },
+        labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+        decimalPlaces: 2,
+
     }
 });

@@ -37,7 +37,7 @@ const VideoView: React.FC<Props> = (props) => {
         if (client.current) {
             client.current.close();
             client.current = null;
-        }
+        }   
 
         if (roomName.current && !connecting.current) {
             console.log("Connecting to SFU room:", roomName.current);

@@ -7,30 +7,35 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { IoTConfigAPI } from "../../apis/IoTConfigAPI";
 import { EventTypeAPI } from "../../apis/EventType";
-import { mapperIOTConfigListFromDatabaseToFE } from "../../utils/mapper/configuration";
+import { mapperIOTConfigListFromDatabaseToFE, mapperListAreaFromDatabaseToFE, mapperListBuildingFromDatabaseToFE, mapperListFloorFromDatabaseToFE } from "../../utils/mapper/configuration";
 import { PieChart, StackedBarChart } from "react-native-chart-kit";
 import { ScrollView } from "react-native";
 import { AreaAPI } from "../../apis/AreaAPI";
 import { BuildingAPI } from "../../apis/BuildingAPI";
 import { FloorAPI } from "../../apis/FloorAPI";
 import { ReportAPI } from "../../apis/ReportAPI";
-import { columnChartEmpty, getThingsForColumnChart, helperColumnChart, helperColumnChartMobile } from "../../utils/helper/helperReport";
+import { columnChartEmpty, getSelectionAreas, getSelectionBuildings, getSelectionFloors, getThingsForColumnChart, helperColumnChart, helperColumnChartMobile } from "../../utils/helper/helperReport";
+import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 
 const screenWidth = Dimensions.get("window").width;
 
 export default function Report({ navigation }) {
 
-    const dispatch = useDispatch();
-    const originalEventsListRedux = useSelector(state => state.event.originalEventsList);
-    const [totalEvents, setTotalEvents] = useState('');
-    const [processedEvents, setProcessedEvents] = useState('');
-    const [trueEvents, setTrueEvents] = useState('');
-    const [falseEvents, setFalseEvents] = useState('');
-    const [iotConfigurations, setIotConfigurations] = useState([]);
-    const [eventTypes, setEventTypes] = useState([]);
+    // const dispatch = useDispatch();
+    // const originalEventsListRedux = useSelector(state => state.event.originalEventsList);
+    // const [totalEvents, setTotalEvents] = useState('');
+    // const [processedEvents, setProcessedEvents] = useState('');
+    // const [trueEvents, setTrueEvents] = useState('');
+    // const [falseEvents, setFalseEvents] = useState('');
+    // const [iotConfigurations, setIotConfigurations] = useState([]);
+    // const [eventTypes, setEventTypes] = useState([]);
     const [dataPieChart, setDataPieChart] = useState([]);
     const [statisticsCount, setStatisticsCount] = useState([]);
     const [columnChartData, setColumnChartData] = useState(columnChartEmpty)
+    const [visible, setVisible] = useState(false);
+    const [selectedMenu, setSelectedMenu] = useState('');
+    const [selectedMenuText, setSelectedMenuText] = useState('');
+    const [selectionColumnChart, setSelectionColumnChart] = useState([]);
 
     const handleDataForPieChart = (events, iotConfigs, eventTypeList) => {
 
@@ -39,8 +44,6 @@ export default function Report({ navigation }) {
             let iotConfigId = events[i].iot_device;
             for (let j = 0; j < iotConfigs.length; j++) {
                 if (iotConfigId == iotConfigs[j].id || iotConfigId == iotConfigs[j]._id) {
-                    // objIoTConfig[iotConfigId] = { ...iotConfigs[j], "number": 0 };
-                    // break;
 
                     let eventTypeId = iotConfigs[j].event_type;
                     for (let m = 0; m < eventTypeList.length; m++) {
@@ -105,7 +108,8 @@ export default function Report({ navigation }) {
                                     statisticsPieChart = res.data;
                                     setStatisticsCount(allStatisticsCount)
 
-
+                                    let resColumnChart = helperColumnChartMobile(statisticsColumnChart);
+                                    setColumnChartData(resColumnChart)
 
                                     // console.log("statisticsPieChart: ", statisticsPieChart)
 
@@ -155,6 +159,14 @@ export default function Report({ navigation }) {
             setRefreshing(false);
         }, 3000);
     }, []);
+    const handleSelectMenu = (type) => {
+        console.log("type: ", type)
+
+        hideMenu();
+    }
+    // const [visible, setVisible] = useState(false);
+    const hideMenu = () => setVisible(false);
+    const showMenu = () => setVisible(true);
 
 
     useEffect(() => {
@@ -213,13 +225,17 @@ export default function Report({ navigation }) {
 
 
 
-                                // let mapperAreas = mapperListAreaFromDatabaseToFE(areas);
-                                // let mapperBuildings = mapperListBuildingFromDatabaseToFE(buildings);
-                                // let mapperFloors = mapperListFloorFromDatabaseToFE(floors, mapperBuildings);
+                                let mapperAreas = mapperListAreaFromDatabaseToFE(areas);
+                                let mapperBuildings = mapperListBuildingFromDatabaseToFE(buildings);
+                                let mapperFloors = mapperListFloorFromDatabaseToFE(floors, mapperBuildings);
 
-                                // let selectAreas = getSelectionAreas(mapperAreas);
-                                // let selectBuildings = getSelectionBuildings(mapperBuildings);
-                                // let selectFloors = getSelectionFloors(mapperFloors);
+                                let selectAreas = getSelectionAreas(mapperAreas);
+                                let selectBuildings = getSelectionBuildings(mapperBuildings);
+                                let selectFloors = getSelectionFloors(mapperFloors);
+                                let selectionForColumnChartCombine = selectAreas.concat(selectBuildings);
+                                selectionForColumnChartCombine = selectionForColumnChartCombine.concat(selectFloors)
+                                console.log("selectionForColumnChartCombine: ", selectionForColumnChartCombine)
+                                setSelectionColumnChart(selectionForColumnChartCombine)
                                 // console.log("mapper areas report: ", selectAreas);
 
 
@@ -312,7 +328,11 @@ export default function Report({ navigation }) {
                 </View>
             </View>
 
-            <View>
+            <View
+                style={{
+                    marginTop: 40,
+                }}
+            >
                 {/* <PieChart
                     data={dataPieChart}
                     width={screenWidth}
@@ -325,6 +345,31 @@ export default function Report({ navigation }) {
                     center={[10, 10]}
                     absolute
                 /> */}
+
+
+                <Menu
+                    style={{
+
+                    }}
+                    visible={visible}
+                    anchor={<Text style={{ color: "red" }} onPress={showMenu}>Chọn khu vực: {selectedMenuText}</Text>}
+                    onRequestClose={hideMenu}
+                >
+                    {
+                        selectionColumnChart.length != 0 ?
+                            selectionColumnChart.map((item, idx) => {
+                                return <MenuItem key={idx} onPress={() => handleSelectMenu(item.value)}>{item.label}</MenuItem>
+                            })
+                            :
+                            ''
+                    }
+                    {/* <MenuItem onPress={() => handleSelectMenu('camera')}>Camera</MenuItem>
+                    <MenuItem onPress={() => handleSelectMenu('camera_type')}>Loại camera</MenuItem>
+                    <MenuItem onPress={() => handleSelectMenu('iot')}>Cảm biến</MenuItem>
+                    <MenuItem onPress={() => handleSelectMenu('iot_type')}>Loại cảm biến</MenuItem>
+                    <MenuItem onPress={() => handleSelectMenu('event')}>Sự kiện</MenuItem>   */}
+                </Menu>
+
 
                 <StackedBarChart
                     // style={graphStyle}
@@ -341,6 +386,13 @@ export default function Report({ navigation }) {
                     chartConfig={styles.chartConfig}
                     backgroundColor={"transparent"}
                 />
+
+                <Text style={{
+                    textAlign: 'center',
+                    fontStyle: 'italic',
+                }}>
+                    Thống kê số lần báo động giả và thật của từng loại cảm biến
+                </Text>
             </View>
 
         </ScrollView>

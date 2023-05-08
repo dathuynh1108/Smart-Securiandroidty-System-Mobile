@@ -175,7 +175,7 @@ export const helperColumnChartMobile = (items) => {
         legend: ['Báo động thật', 'Báo động giả'],
         data: dataset,
         // barColors: ["#dfe4ea", "#ced6e0", "#a4b0be"]
-        barColors: ["green", "yellow"]
+        barColors: ["#00A86B", "#CA3433"]
     };
 
     return data;
@@ -331,10 +331,10 @@ export const getSelectionAreas = (items) => {
             label: item.area_name,
         }
     })
-    items.push({
-        label: '',
-        value: '',
-    })
+    // items.push({
+    //     label: '',
+    //     value: '',
+    // })
 
     return items;
 }
@@ -346,10 +346,10 @@ export const getSelectionBuildings = (items) => {
             label: item.area_name,
         }
     })
-    items.push({
-        label: '',
-        value: '',
-    })
+    // items.push({
+    //     label: '',
+    //     value: '',
+    // })
 
     return items;
 }
@@ -361,10 +361,10 @@ export const getSelectionFloors = (items) => {
             label: item.area_name,
         }
     })
-    items.push({
-        label: '',
-        value: '',
-    })
+    // items.push({
+    //     label: '',
+    //     value: '',
+    // })
 
     return items;
 }
@@ -376,10 +376,10 @@ export const getSelectionIotTypes = (items) => {
             label: item.iot_device_type_name,
         }
     })
-    items.push({
-        label: '',
-        value: '',
-    })
+    // items.push({
+    //     label: '',
+    //     value: '',
+    // })
 
     return items;
 }
