@@ -7,6 +7,7 @@ import dataIOTDevicesConfig from "../../utils/dummyData/managementIOTDeviceConfi
 import iotDevices from "../../utils/dummyData/managementCameraDevice.json";
 import cameraDevices from "../../utils/dummyData/managementIOTDevice.json";
 import ImageModal from "react-native-image-modal";
+import { CameraTypeAPI } from "../../apis/CameraTypeAPI";
 
 
 export default function ConfigurationCameraTypeList({ navigation, cameraTypeConfigList }) {
@@ -39,7 +40,14 @@ export default function ConfigurationCameraTypeList({ navigation, cameraTypeConf
     }
 
     useEffect(() => {
-        setData(cameraTypeConfigList)
+
+        let cameraTypes = [];
+        CameraTypeAPI.getAll().then(res => {
+            cameraTypes = res.data.camera_types;
+            setData(cameraTypes)
+        })
+
+        // setData(cameraTypeConfigList)
     }, [cameraTypeConfigList])
 
 

@@ -45,7 +45,6 @@ import {
 
 export default function VideoView() {
   const [refreshing, setRefreshing] = React.useState(false);
-
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
@@ -59,7 +58,8 @@ export default function VideoView() {
         contentContainerStyle={styles.scrollView}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }>
+        }
+      >
         <Text>Pull down to see RefreshControl indicator</Text>
       </ScrollView>
     </SafeAreaView>

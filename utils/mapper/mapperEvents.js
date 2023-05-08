@@ -73,7 +73,8 @@ export const mapperEventsUtils = (items, iotConfigs, eventTypes, iotMaps, camera
             building_id,
             floor_level,
             area_name,
-            created_at: new Date(event.created_at).toISOString(),
+            // created_at: new Date(event.created_at).toISOString(),
+            event_time: new Date(event.event_time).toISOString(),
 
             video_url: event.detection_image_url ? event.detection_image_url : 'https://www.datasciencecentral.com/wp-content/uploads/2021/10/9712908078.jpeg'
         }

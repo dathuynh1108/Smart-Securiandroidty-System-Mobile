@@ -24,6 +24,7 @@ import { mapperListIOTTypeFromDatabaseToFE, mapperIOTConfigListFromDatabaseToFE,
 import { EventTypeAPI } from "../../apis/EventType";
 import { useDispatch, useSelector } from "react-redux";
 import { mapperEventsUtils } from "../../utils/mapper/mapperEvents";
+import { useCallback } from "react";
 
 
 export default function Event({ navigation }) {
@@ -54,14 +55,21 @@ export default function Event({ navigation }) {
     const [iotConfigurations, setIotConfigurations] = useState([]);
     const [eventTypes, setEventTypes] = useState([]);
     const [iotTypes, setIotsType] = useState([]);
+    const [refreshing, setRefreshing] = useState(false);
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 3000);
+    }, []);
     const FlatListItem = (item, index) => {
         return <TouchableOpacity onPress={() => navigation.navigate('EventDetail', item,)}>
             <View style={styles.itemBlock}>
                 <Text style={styles.itemFirst}>{item.event_name}</Text>
                 <Text style={styles.itemSecond}>{item['zone']}</Text>
                 <View style={styles.itemThird}>
-                    <Text> {item.created_at.split("T")[0]} </Text>
-                    <Text> {item.created_at.split("T")[1]} </Text>
+                    <Text> {item.event_time.split("T")[0]} </Text>
+                    <Text> {item.event_time.split("T")[1]} </Text>
                 </View>
             </View>
         </TouchableOpacity>
@@ -138,7 +146,8 @@ export default function Event({ navigation }) {
         // console.log("currentEventsList EVENT: ", currentEventsList)
         currentEventsList = currentEventsList.filter((event, index) => {
 
-            let convertedCreatedAt = helperDateISO(event.created_at);
+            // let convertedCreatedAt = helperDateISO(event.created_at);
+            let convertedCreatedAt = helperDateISO(event.event_time);
             let eventDateObject = Date.parse(convertedCreatedAt);
             if (startDateObject <= eventDateObject && eventDateObject <= endDateObject) {
                 return event;
@@ -229,7 +238,7 @@ export default function Event({ navigation }) {
 
     useEffect(() => {
         /* call api to get iotDevicesMap, cameraDevicesMap, dataIOTDevicesConfig, dataEvents, dataEventsType */
-
+        console.log("use effect event")
         let areas = [], buildings = [], floors = [], iotMaps = [], cameraMaps = [], events = [], eventTypes = [], newSeries = [], iotConfigs = [], cameraConfigs = [], iotTypes = []
 
         AreaAPI.getAll().then(res => {
@@ -314,7 +323,7 @@ export default function Event({ navigation }) {
         // setDevicesList(dataDevices);
         // mapperEvents(dataEvents, false)
         // mapperEvents(dataEvents, true)
-    }, [eventsListRedux]);
+    }, [eventsListRedux, refreshing]);
 
 
     return (
@@ -420,6 +429,8 @@ export default function Event({ navigation }) {
                 }}
                 keyExtractor={(item, index) => index.toString()}
                 ListHeaderComponent={FlatListHeader}
+                onRefresh={() => onRefresh()}
+                refreshing={refreshing}
             >
             </FlatList>
 

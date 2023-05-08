@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
-import dataBuildings from "../../utils/dummyData/managementBuilding.json";
-import dataFloors from "../../utils/dummyData/managementFloor.json";
-import dataCamerasMap from "../../utils/dummyData/managementCameraDevice.json";
-import dataIotsMap from "../../utils/dummyData/managementIOTDevice.json";
-import dataCamerasConfig from "../../utils/dummyData/managementCameraDeviceConfig.json";
+// import dataBuildings from "../../utils/dummyData/managementBuilding.json";
+// import dataFloors from "../../utils/dummyData/managementFloor.json";
+// import dataCamerasMap from "../../utils/dummyData/managementCameraDevice.json";
+// import dataIotsMap from "../../utils/dummyData/managementIOTDevice.json";
+// import dataCamerasConfig from "../../utils/dummyData/managementCameraDeviceConfig.json";
 import { styles } from "./styles";
 import VideoViewLivestream from "../VideoViewLivestream";
 import { RTCView } from "react-native-webrtc";
@@ -14,78 +14,88 @@ import { FloorAPI } from "../../apis/FloorAPI";
 import { CameraMapAPI } from "../../apis/CameraMapAPI";
 import { mapperCamerasMapWithCameraConfig, mapperListAreaFromDatabaseToFE, mapperListBuildingFromDatabaseToFE, mapperListCameraConfigurationFromDatabaseToFE, mapperListDeviceFromDatabaseToFE, mapperListFloorFromDatabaseToFE } from "../../utils/mapper/configuration";
 import { CameraConfigAPI } from "../../apis/CameraConfigAPI";
+import { useCallback } from "react";
+import { RefreshControl } from "react-native";
 export default function MonitorVideo({ navigation }) {
-  const [buildingsList, setBuildingsList] = useState([]);
-  const [floorsList, setFloorsList] = useState([]);
-  const [camerasMapList, setCamerasMapList] = useState([]);
-  const [iotsMapList, setIotsMapList] = useState([]);
-  const [camerasConfigList, setCamerasConfigList] = useState([]);
+  // const [buildingsList, setBuildingsList] = useState([]);
+  // const [floorsList, setFloorsList] = useState([]);
+  // const [camerasMapList, setCamerasMapList] = useState([]);
+  // const [iotsMapList, setIotsMapList] = useState([]);
+  // const [camerasConfigList, setCamerasConfigList] = useState([]);
   const [videosList, setVideosList] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 3000);
+  }, []);
 
-  const mapperVideo = (
-    buildings,
-    floors,
-    camerasMap,
-    iotsMap,
-    camerasConfig,
-  ) => {
-    let results = [];
-    for (let i = 0; i < camerasMap.length; i++) {
-      if (camerasMap[i].connect_camera == "") continue;
+  // const mapperVideo = (
+  //   buildings,
+  //   floors,
+  //   camerasMap,
+  //   iotsMap,
+  //   camerasConfig,
+  // ) => {
+  //   let results = [];
+  //   for (let i = 0; i < camerasMap.length; i++) {
+  //     if (camerasMap[i].connect_camera == "") continue;
 
-      let building_name = "",
-        floor_name = "",
-        observe_iot_name = "",
-        camera_name = "",
-        camera_config_name = "",
-        video_url = "";
+  //     let building_name = "",
+  //       floor_name = "",
+  //       observe_iot_name = "",
+  //       camera_name = "",
+  //       camera_config_name = "",
+  //       video_url = "";
 
-      for (let j = 0; j < buildings.length; j++) {
-        if (buildings[j].id == camerasMap[i].building_id) {
-          building_name = buildings[j].name;
-          break;
-        }
-      }
+  //     for (let j = 0; j < buildings.length; j++) {
+  //       if (buildings[j].id == camerasMap[i].building_id) {
+  //         building_name = buildings[j].name;
+  //         break;
+  //       }
+  //     }
 
-      if (camerasMap[i].floor_level == -1) {
-        floor_name = "Không thuộc tầng";
-      } else {
-        for (let j = 0; j < floors.length; j++) {
-          if (
-            floors[j].building_id == camerasMap[i].building_id &&
-            floors[j].floor_level == camerasMap[i].floor_level
-          ) {
-            floor_name = floors[j].name;
-            break;
-          }
-        }
-      }
+  //     if (camerasMap[i].floor_level == -1) {
+  //       floor_name = "Không thuộc tầng";
+  //     } else {
+  //       for (let j = 0; j < floors.length; j++) {
+  //         if (
+  //           floors[j].building_id == camerasMap[i].building_id &&
+  //           floors[j].floor_level == camerasMap[i].floor_level
+  //         ) {
+  //           floor_name = floors[j].name;
+  //           break;
+  //         }
+  //       }
+  //     }
 
-      for (let j = 0; j < camerasConfig.length; j++) {
-        if (camerasMap[i].connect_camera == camerasConfig[j].id) {
-          video_url = camerasConfig[j].video_url;
-          break;
-        }
-      }
+  //     for (let j = 0; j < camerasConfig.length; j++) {
+  //       if (camerasMap[i].connect_camera == camerasConfig[j].id) {
+  //         video_url = camerasConfig[j].video_url;
+  //         break;
+  //       }
+  //     }
 
-      camera_name = camerasMap[i].name;
+  //     camera_name = camerasMap[i].name;
 
-      results.push({ building_name, floor_name, camera_name, video_url });
-    }
+  //     results.push({ building_name, floor_name, camera_name, video_url });
+  //   }
 
-    // console.log("result list videos: ", results);
-    setVideosList(results);
-  };
+  //   // console.log("result list videos: ", results);
+  //   setVideosList(results);
+  // };
 
 
-  const mapperVideoList = (areas, buildings, floors, cameraMaps) => {
-    let res = [];
-    for (let i = 0; i < cameraMaps.length; i++) {
-      if (!cameraMaps[i].connect_camera == '') continue;
-    }
-  }
+  // const mapperVideoList = (areas, buildings, floors, cameraMaps) => {
+  //   let res = [];
+  //   for (let i = 0; i < cameraMaps.length; i++) {
+  //     if (!cameraMaps[i].connect_camera == '') continue;
+  //   }
+  // }
 
   useEffect(() => {
+    console.log("use effect monitor video")
 
     let areas = [], buildings = [], floors = [], cameraMaps = [], cameraConfigs = []
     AreaAPI.getAll().then(res => {
@@ -134,7 +144,7 @@ export default function MonitorVideo({ navigation }) {
     //   currentIotsMap,
     //   currentCamerasConfig,
     // );
-  }, []);
+  }, [refreshing]);
   return (
     // <ScrollView horizontal contentContainerStyle={{ flexGrow: 1 }} style={styles.monitorVideoContainer} scrollEnabled>
     //   <Text style={styles.title}>Giám sát camera</Text>
@@ -152,6 +162,9 @@ export default function MonitorVideo({ navigation }) {
 
     <ScrollView
       style={styles.monitorVideoContainer}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
     >
       <Text style={styles.title}>Giám sát camera</Text>
       {videosList.map((video, idx) => {
@@ -171,7 +184,7 @@ export default function MonitorVideo({ navigation }) {
           }
           <Text style={styles.cameraNameLeft}> <Text style={styles.titleBuildingAndFloor}>Tên camera: </Text> {video.camera_name}</Text>
 
-          <VideoViewLivestream roomName={video.sfu_rtsp_stream_url} />
+          <VideoViewLivestream navigation={navigation} roomName={video.sfu_rtsp_stream_url} />
 
           <View style={styles.bottomLine} />
         </View>

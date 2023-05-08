@@ -2,7 +2,7 @@ import { Dimensions, RefreshControl, Text, View } from "react-native";
 import '../../styles/appStyles';
 import { appStyles } from "../../styles/appStyles";
 import { styles } from "./styles"
-import dataEvents from '../../utils/dummyData/eventList.json';
+// import dataEvents from '../../utils/dummyData/eventList.json';
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { IoTConfigAPI } from "../../apis/IoTConfigAPI";
@@ -33,46 +33,53 @@ export default function Report({ navigation }) {
     const [statisticsCount, setStatisticsCount] = useState([]);
     const [columnChartData, setColumnChartData] = useState(columnChartEmpty)
     const [visible, setVisible] = useState(false);
+    const [visibleColumnChartArea, setVisibleColumnChartArea] = useState(false);
+    const [visibleColumnChartInterval, setVisibleColumnChartInterval] = useState(false);
+    const [visibleColumnChartIoTType, setvisibleColumnChartIoTType] = useState(false);
+    // const [visible, setVisible] = useState(false);
     const [selectedMenu, setSelectedMenu] = useState('');
     const [selectedMenuText, setSelectedMenuText] = useState('');
+    const [selectedMenuTextLineChart, setSelectedMenuTextLineChart] = useState('');
+    const [selectedIntervalTypeTextLineChart, setSelectedIntervalTypeTextLineChart] = useState('');
+    const [selectedIoTTypeTextLineChart, setSelectedIoTTypeTextLineChart] = useState('');
     const [selectionColumnChart, setSelectionColumnChart] = useState([]);
 
-    const handleDataForPieChart = (events, iotConfigs, eventTypeList) => {
+    // const handleDataForPieChart = (events, iotConfigs, eventTypeList) => {
 
-        let objIoTConfig = {}, data = [], objEventType = {};
-        for (let i = 0; i < events.length; i++) {
-            let iotConfigId = events[i].iot_device;
-            for (let j = 0; j < iotConfigs.length; j++) {
-                if (iotConfigId == iotConfigs[j].id || iotConfigId == iotConfigs[j]._id) {
+    //     let objIoTConfig = {}, data = [], objEventType = {};
+    //     for (let i = 0; i < events.length; i++) {
+    //         let iotConfigId = events[i].iot_device;
+    //         for (let j = 0; j < iotConfigs.length; j++) {
+    //             if (iotConfigId == iotConfigs[j].id || iotConfigId == iotConfigs[j]._id) {
 
-                    let eventTypeId = iotConfigs[j].event_type;
-                    for (let m = 0; m < eventTypeList.length; m++) {
-                        if (eventTypeId == eventTypeList[m]._id) {
-                            if (objEventType[eventTypeId] == undefined) {
-                                objEventType[eventTypeId] = { ...eventTypeList[m], "number": 0 };
-                            }
-                        }
-                    }
-                    objEventType[eventTypeId]['number'] = objEventType[eventTypeId]['number'] + 1;
-                    break;
-                }
-            }
-        }
-        for (const property in objEventType) {
-            let randomColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
-            let labelName = objEventType[property]['event_name']
-            let obj = {
-                name: labelName,
-                population: objEventType[property]['number'],
-                color: randomColor,
-                legendFontColor: randomColor,
-                legendFontSize: 11,
-            }
-            data.push(obj);
-        }
+    //                 let eventTypeId = iotConfigs[j].event_type;
+    //                 for (let m = 0; m < eventTypeList.length; m++) {
+    //                     if (eventTypeId == eventTypeList[m]._id) {
+    //                         if (objEventType[eventTypeId] == undefined) {
+    //                             objEventType[eventTypeId] = { ...eventTypeList[m], "number": 0 };
+    //                         }
+    //                     }
+    //                 }
+    //                 objEventType[eventTypeId]['number'] = objEventType[eventTypeId]['number'] + 1;
+    //                 break;
+    //             }
+    //         }
+    //     }
+    //     for (const property in objEventType) {
+    //         let randomColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
+    //         let labelName = objEventType[property]['event_name']
+    //         let obj = {
+    //             name: labelName,
+    //             population: objEventType[property]['number'],
+    //             color: randomColor,
+    //             legendFontColor: randomColor,
+    //             legendFontSize: 11,
+    //         }
+    //         data.push(obj);
+    //     }
 
-        setDataPieChart(data);
-    }
+    //     setDataPieChart(data);
+    // }
 
     const [refreshing, setRefreshing] = useState(false);
     const onRefresh = useCallback(() => {
@@ -159,14 +166,36 @@ export default function Report({ navigation }) {
             setRefreshing(false);
         }, 3000);
     }, []);
-    const handleSelectMenu = (type) => {
+    const handleSelectMenu = (type, label) => {
         console.log("type: ", type)
+        let newParam = {
+            'area_id': type,
+            'start_time': '2023-01-01T03:38:17.904Z',
+            'end_time': '2023-12-31T05:38:17.904Z'
+        }
 
+        let statisticsColumnChart = [];
+        ReportAPI.getNumberOfIoTEventByTypeAndTrueAlarm(newParam).then(res => {
+            statisticsColumnChart = res.data;
+            let resColumnChart = helperColumnChartMobile(statisticsColumnChart);
+            setColumnChartData(resColumnChart)
+        })
+        setSelectedMenuText(label)
         hideMenu();
     }
     // const [visible, setVisible] = useState(false);
     const hideMenu = () => setVisible(false);
     const showMenu = () => setVisible(true);
+
+
+    const hideMenuAreaColumn = () => setVisibleColumnChartArea(false);
+    const showMenuAreaColumn = () => setVisibleColumnChartArea(true);
+
+    const hideMenuIntervalColumn = () => setVisibleColumnChartInterval(false);
+    const showMenuIntervalColumn = () => setVisibleColumnChartInterval(true);
+
+    const hideMenuIoTTypeColumn = () => setvisibleColumnChartIoTType(false);
+    const showMenuIoTTypeColumn = () => setvisibleColumnChartIoTType(true);
 
 
     useEffect(() => {
@@ -211,6 +240,7 @@ export default function Report({ navigation }) {
                                 // setSeriesPieChart(thingsForPieChart.seriesPieChartConstant);
 
 
+                                setSelectedMenuText(areas[0].area_name)
                                 let resColumnChart = helperColumnChartMobile(statisticsColumnChart);
                                 setColumnChartData(resColumnChart)
                                 // let thingsForColumnChart = getThingsForColumnChart(resColumnChart);
@@ -352,13 +382,98 @@ export default function Report({ navigation }) {
 
                     }}
                     visible={visible}
-                    anchor={<Text style={{ color: "red" }} onPress={showMenu}>Chọn khu vực: {selectedMenuText}</Text>}
+                    anchor={<Text style={{ color: "dodgerblue", fontWeight: 'bold' }} onPress={showMenu}>Chọn khu vực: {selectedMenuText}</Text>}
                     onRequestClose={hideMenu}
                 >
                     {
                         selectionColumnChart.length != 0 ?
                             selectionColumnChart.map((item, idx) => {
-                                return <MenuItem key={idx} onPress={() => handleSelectMenu(item.value)}>{item.label}</MenuItem>
+                                return <MenuItem key={idx} onPress={() => handleSelectMenu(item.value, item.label)}>{item.label}</MenuItem>
+                            })
+                            :
+                            ''
+                    }
+                    {/* <MenuItem onPress={() => handleSelectMenu('camera')}>Camera</MenuItem>
+                    <MenuItem onPress={() => handleSelectMenu('camera_type')}>Loại camera</MenuItem>
+                    <MenuItem onPress={() => handleSelectMenu('iot')}>Cảm biến</MenuItem>
+                    <MenuItem onPress={() => handleSelectMenu('iot_type')}>Loại cảm biến</MenuItem>
+                    <MenuItem onPress={() => handleSelectMenu('event')}>Sự kiện</MenuItem>   */}
+                </Menu>
+
+
+                <StackedBarChart
+                    // style={graphStyle}
+                    style={{
+                        marginTop: 10,
+                        borderRadius: 5,
+                        marginRight: 1,
+                        paddingRight: 3,
+                    }}
+                    data={columnChartData}
+                    width={screenWidth}
+                    height={290}
+                    center={[10, 10]}
+                    chartConfig={styles.chartConfig}
+                    backgroundColor={"transparent"}
+                />
+
+                <Text style={{
+                    textAlign: 'center',
+                    fontStyle: 'italic',
+                }}>
+                    Thống kê số lần báo động giả và thật của từng loại cảm biến
+                </Text>
+            </View>
+
+
+
+            <View
+                style={{
+                    marginTop: 40,
+                }}
+            >
+                {/* <PieChart
+                    data={dataPieChart}
+                    width={screenWidth}
+                    height={290}
+                    chartConfig={styles.chartConfig}
+                    accessor={"population"}
+                    backgroundColor={"transparent"}
+                    paddingLeft={"15"}
+                    paddingRight={"15"}
+                    center={[10, 10]}
+                    absolute
+                /> */}
+
+
+                <Menu
+                    style={{
+
+                    }}
+                    visible={visibleColumnChartArea}
+                    anchor={<Text style={{ color: "dodgerblue", fontWeight: 'bold' }} onPress={showMenuAreaColumn}>Chọn khu vực: { }</Text>}
+                    onRequestClose={hideMenu}
+                >
+                    <MenuItem onPress={() => handleSelectMenu('camera')}>Camera</MenuItem>
+                    <MenuItem onPress={() => handleSelectMenu('camera_type')}>Loại camera</MenuItem>
+                    <MenuItem onPress={() => handleSelectMenu('iot')}>Cảm biến</MenuItem>
+                    <MenuItem onPress={() => handleSelectMenu('iot_type')}>Loại cảm biến</MenuItem>
+                    <MenuItem onPress={() => handleSelectMenu('event')}>Sự kiện</MenuItem>
+                </Menu>
+
+
+                <Menu
+                    style={{
+
+                    }}
+                    visible={visibleColumnChartInterval}
+                    anchor={<Text style={{ color: "dodgerblue", fontWeight: 'bold' }} onPress={showMenu}>Chọn khu vực: {selectedMenuText}</Text>}
+                    onRequestClose={hideMenu}
+                >
+                    {
+                        selectionColumnChart.length != 0 ?
+                            selectionColumnChart.map((item, idx) => {
+                                return <MenuItem key={idx} onPress={() => handleSelectMenu(item.value, item.label)}>{item.label}</MenuItem>
                             })
                             :
                             ''

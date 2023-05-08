@@ -25,6 +25,8 @@ import { EventTypeAPI } from "../../apis/EventType";
 import { useDispatch, useSelector } from "react-redux";
 import { getEventsList } from "../../reducers/eventReducer";
 import { mapperEventsUtils } from "../../utils/mapper/mapperEvents";
+import { useCallback } from "react";
+import { RefreshControl } from "react-native";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -36,8 +38,8 @@ export default function Dashboard({ route, navigation }) {
     const eventsListRedux = useSelector(state => state.event.eventsList);
     let eventsList = eventsListRedux;
     // console.log("eventsListRedux: ", eventsListRedux)
-    const [iotDevicesMap, setIotDevicesMap] = useState([]);           // map
-    const [cameraDevicesMap, setCameraDevicesMap] = useState([]);     // map
+    // const [iotDevicesMap, setIotDevicesMap] = useState([]);           // map
+    // const [cameraDevicesMap, setCameraDevicesMap] = useState([]);     // map
     const [buildingsList, setBuildingsList] = useState([]);
     const [recentEvents, setRecentEvents] = useState([]);
     const [events, setEvents] = useState([]);
@@ -45,6 +47,13 @@ export default function Dashboard({ route, navigation }) {
     const [iotDevices, setIotDevices] = useState([]);           // map
     const [cameraDevices, setCameraDevices] = useState([]);     // map
     const [areasList, setAreasList] = useState([]);
+    const [refreshing, setRefreshing] = useState(false);
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 3000);
+    }, []);
     // const [totalIotTypesInfo, setTotalIotTypesInfo] = useState([]);
     // const mapperRecentEvents = (events) => {
     //     // console.log("mapperRecentEvents: ", events)
@@ -189,7 +198,7 @@ export default function Dashboard({ route, navigation }) {
 
     useEffect(() => {
         /* call api to get dataBuildings, dataEvents, iotDevicesMap, cameraDevicesMap */
-
+        console.log("use effect dashboard.")
         let areas = [], buildings = [], floors = [], iotMaps = [], cameraMaps = [], events = [], eventTypes = [], newSeries = [], iotConfigs = [], cameraConfigs = [], iotTypes = []
 
         AreaAPI.getAll().then(res => {
@@ -277,11 +286,16 @@ export default function Dashboard({ route, navigation }) {
         // setEvents(currentEvents);
         // mapperRecentEvents(dataEvents);
         // handleDataForPieChart(currentCameraMap.length, currentIotMap.length);
-    }, [eventsListRedux])
+    }, [eventsListRedux, refreshing])
 
 
     return (
-        <ScrollView style={appStyles.appContainer}>
+        <ScrollView
+            style={appStyles.appContainer}
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+        >
             <View style={styles.threeNumberBlock}>
                 <View style={styles.eachBlock}>
                     <Text style={styles.numberOfEachBlock}> {areasList && areasList.length} </Text>

@@ -1,4 +1,4 @@
-import {StyleSheet} from "react-native";
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
     iotConfigDetailBlock: {
@@ -11,12 +11,13 @@ export const styles = StyleSheet.create({
 
     iotConfigDetailLeft: {
         width: '30%',
-        backgroundColor: 'red',
+        // backgroundColor: 'red',
         marginLeft: 10
     },
 
     iotConfigDetailRight: {
-        width: '70%', backgroundColor: 'yellow'
+        width: '70%',
+        // backgroundColor: 'yellow'
     },
 
     editResponseButton: {

@@ -1,7 +1,7 @@
-import {useEffect, useState} from "react";
-import {Dimensions, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native"
-import {GooglePlacesAutocomplete} from "react-native-google-places-autocomplete"
-import MapView, {Callout, Circle, LocalTile, Marker, Overlay, UrlTile} from "react-native-maps"
+import { useEffect, useState } from "react";
+import { Dimensions, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete"
+import MapView, { Callout, Circle, LocalTile, Marker, Overlay, UrlTile } from "react-native-maps"
 import dataEvents from '../../utils/dummyData/eventList.json';
 import dataIOTDevicesConfig from '../../utils/dummyData/managementIOTDeviceConfig.json';
 import dataCameraDevices from '../../utils/dummyData/managementCameraDevice.json';
@@ -9,7 +9,7 @@ import dataIOTDevices from '../../utils/dummyData/managementIOTDevice.json';
 import dataBuildings from '../../utils/dummyData/managementBuilding.json';
 import dataFloors from '../../utils/dummyData/managementFloor.json';
 import treeselectData from '../../utils/dummyData/treeData.json';
-import {generateDropdownTreeSelectMap} from "../../utils/helper/helper";
+import { generateDropdownTreeSelectMap } from "../../utils/helper/helper";
 import TreeSelect from 'react-native-tree-select';
 import mapImage from '../../assets/imageTest/floor2_B.png'
 import mapImage1 from '../../assets/imageTest/buildingA.png'
@@ -27,8 +27,8 @@ const OverlayComponent = () => {
                 display: 'flex',
                 resizeMode: 'contain',
             }}
-                             source={mapImage1}
-                             scale={0.5}
+                source={mapImage1}
+                scale={0.5}
             />
 
         </View>
@@ -36,7 +36,7 @@ const OverlayComponent = () => {
 }
 
 
-export default function Monitor({navigation}) {
+export default function Monitor({ navigation }) {
     const [dataTree, setDataTree] = useState([]);
     const [result, setResult] = useState('');
     const [pin, setPin] = useState({
@@ -53,14 +53,14 @@ export default function Monitor({navigation}) {
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421
     })
-    const _onClick = ({item, routes, currentNode}) => {
+    const _onClick = ({ item, routes, currentNode }) => {
         // console.log("item: ", item.type)
         // console.log("current node: ", currentNode)
         console.log(item.name, currentNode);
         console.log(routes);
         setResult(item.name);
     }
-    const _onClickLeaf = ({item, routes, currentNode}) => {
+    const _onClickLeaf = ({ item, routes, currentNode }) => {
         console.log(item.name, currentNode);
         console.log(routes);
     };
@@ -73,7 +73,7 @@ export default function Monitor({navigation}) {
 
 
     return (
-        <View style={{marginTop: 10, flex: 1}}>
+        <View style={{ marginTop: 10, flex: 1 }}>
             <Text>{result}</Text>
 
             {/*<View style={{*/}
@@ -168,7 +168,7 @@ export default function Monitor({navigation}) {
                         latitudeDelta: 0.0922,
                         longitudeDelta: 0.0421
                     }}
-                    // provider="google"
+                // provider="google"
                 >
                     {/*<Marker*/}
                     {/*    coordinate={pin}*/}
