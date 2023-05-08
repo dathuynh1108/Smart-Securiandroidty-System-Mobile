@@ -225,14 +225,14 @@ export const mapperCameraConfigurationFromDatabaseToFE = (item) => {       // on
         "name": item.camera_name,
         "type": "camera",
         // "status": item.status,
-        "status": "free",
+        "status": item.status,
         "connect_event_type": item.event_type,
         "connect_camera_type": item.camera_type,
-        "offsetXBegin": item.offsetXBegin,
-        "offsetXEnd": item.offsetXEnd,
-        "offsetYBegin": item.offsetYBegin,
-        "offsetYEnd": item.offsetYEnd,
-        "video_url": "",
+        "offsetXBegin": item.offset_x_begin,
+        "offsetXEnd": item.offset_x_end,
+        "offsetYBegin": item.offset_y_begin,
+        "offsetYEnd": item.offset_y_end,
+        "video_url": item.sfu_rtsp_stream_url,
     }
 }
 
@@ -335,6 +335,40 @@ export const mapperListFloorFromDatabaseToFE = (items, buildings = []) => {
 }
 
 
+const findAreaNames = (allAreas, areaId, buildingId, floorLevel) => {
+    let area_name = '', building_name = '', floor_name = ''
+
+    for (let i = 0; i < allAreas.length; i++) {
+        if (allAreas[i].type == 'area' && areaId == allAreas[i]._id) {
+            area_name = allAreas[i].area_name;
+            break;
+        }
+    }
+
+
+    if (buildingId != -1 && buildingId) {
+        for (let i = 0; i < allAreas.length; i++) {
+            if (allAreas[i].type == 'building' && buildingId == allAreas[i]._id) {
+                building_name = allAreas[i].area_name;
+                break;
+            }
+        }
+    }
+
+    if (floorLevel != -1 && floorLevel) {
+        for (let i = 0; i < allAreas.length; i++) {
+            if (allAreas[i].type == 'floor' && allAreas[i].building_id == buildingId && allAreas[i].floor_level == floorLevel) {
+                floor_name = allAreas[i].area_name;
+                break;
+            }
+        }
+    }
+
+
+    return { area_name, building_name, floor_name };
+}
+
+
 export const mapperDeviceFromDatabaseToFE = (item, areas = [], buildings = [], floors = []) => {       // one object
     // console.log("item: ", item)
 
@@ -379,6 +413,9 @@ export const mapperDeviceFromDatabaseToFE = (item, areas = [], buildings = [], f
         }
     }
 
+    let { area_name, building_name, floor_name } = findAreaNames(listAllAreas, area_id, building_id, floor_level);
+    // console.log("{ area_name, building_name, floor_name }: ", { area_name, building_name, floor_name })
+
     if (type == 'iot') {
         return {
             ...item,
@@ -393,6 +430,9 @@ export const mapperDeviceFromDatabaseToFE = (item, areas = [], buildings = [], f
             // "address": 1,
             "observed_status": item.observed_status ? item.observed_status : '',
             "connect_iot": item.connect_iot ? item.connect_iot : "",
+            area_name,
+            building_name,
+            floor_name,
         }
     } else {
 
@@ -410,11 +450,32 @@ export const mapperDeviceFromDatabaseToFE = (item, areas = [], buildings = [], f
             // "address": 1,
             "observe_iot": item.observe_iot ? item.observe_iot : "",
             "connect_camera": item.connect_camera ? item.connect_camera : "",
+            area_name,
+            building_name,
+            floor_name,
         }
     }
 }
 
 export const mapperListDeviceFromDatabaseToFE = (items, areas = [], buildings = [], floors = []) => {
     return items.map(item => mapperDeviceFromDatabaseToFE(item, areas, buildings, floors));
+}
+
+
+export const mapperCamerasMapWithCameraConfig = (cameraMaps, cameraConfigs) => {
+    console.log("mapperCamerasMapWithCameraConfig: ", cameraMaps, cameraConfigs)
+    for (let i = 0; i < cameraMaps.length; i++) {
+        if (cameraMaps[i].connect_camera != '') {
+            for (let j = 0; j < cameraConfigs.length; j++) {
+                if (cameraMaps[i].connect_camera == cameraConfigs[j]._id) {
+                    cameraMaps[i] = { ...cameraMaps[i], 'video_url': cameraConfigs[j].sfu_rtsp_stream_url };
+                    console.log("here find")
+                    break;
+                }
+            }
+        }
+    }
+
+    return cameraMaps;
 }
 
