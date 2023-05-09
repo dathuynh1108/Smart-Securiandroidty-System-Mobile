@@ -58,7 +58,7 @@ export const helperColumnChart = (items) => {
         obj[idNumber] = infoObj;
     }
 
-    console.log("object column chart: ", obj);
+    // console.log("object column chart: ", obj);
 
     let xaxisColumnChart = [], dataForTrueAlarm = [], dataForFalseAlarm = []
     for (let property in obj) {
@@ -128,7 +128,7 @@ export const columnChartEmpty = {
 };
 
 export const helperColumnChartMobile = (items) => {
-    console.log("helperColumnChartMobile: ", items)
+    // console.log("helperColumnChartMobile: ", items)
     let obj = {}
     for (let i = 0; i < items.length; i++) {
         let idNumber = items[i]._id.iot_device_type._id;
@@ -199,7 +199,7 @@ export const helperPieChart = (items) => {
         obj[idNumber] = infoObj;
     }
 
-    console.log("object pie chart: ", obj);
+    // console.log("object pie chart: ", obj);
 
     let xaxisPieChart = [], dataForPieChart = [], dataForFalseAlarm = []
     for (let property in obj) {
@@ -267,8 +267,22 @@ const helperIntervalAreaChart = (item, interval_type) => {
 }
 
 
+export const lineChartEmpty = {
+    labels: ["January", "February", "March", "April", "May", "June"],
+    datasets: [
+        {
+            data: [20, 45, 28, 80, 99, 43],
+            color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
+            strokeWidth: 2 // optional
+        }
+    ],
+    legend: ["Rainy Days"] // optional
+};
+
 export const helperAreaChart = (items, interval_type) => {
+    // console.log("items area chart: ", items)
     let xaxisAreaChart = [], dataForAreaChart = [], dataForFalseAlarm = []
+
     for (let i = 0; i < items.length; i++) {
         let event_count = items[i].event_count;
         let label = helperIntervalAreaChart(items[i], interval_type);
@@ -276,9 +290,32 @@ export const helperAreaChart = (items, interval_type) => {
         dataForAreaChart.push(event_count)
     }
 
-    console.log("xaxisAreaChart area chart: ", xaxisAreaChart);
+    // console.log("xaxisAreaChart area chart: ", xaxisAreaChart);
+    // console.log("dataForAreaChart area chart: ", dataForAreaChart);
 
-    return { xaxisAreaChart, dataForAreaChart };
+
+
+    if (xaxisAreaChart.length == 0) {
+        xaxisAreaChart = ['No data']
+        dataForAreaChart = [0]
+    }
+
+    let dataRes = {
+        labels: xaxisAreaChart,
+        datasets: [
+            {
+                data: dataForAreaChart,
+                color: (opacity = 1) => `#ff4747`, // optional
+                strokeWidth: 2 // optional
+            }
+        ],
+        legend: ["Số sự kiện"] // optional
+    };
+
+
+    return dataRes;
+
+    // return { xaxisAreaChart, dataForAreaChart };
 }
 
 export const getThingsForAreaChart = (resAreaChart) => {

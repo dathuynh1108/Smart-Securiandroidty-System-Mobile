@@ -1,11 +1,11 @@
 import { reduce_image_file_size, resizeImage } from "../images/convertImage";
 
 export const mapperCameraConfigFromFEToDB = (values, optionsCameraType, optionsEventType) => {
-    console.log("MAPPER: ", values, optionsCameraType, optionsEventType)
+    // console.log("MAPPER: ", values, optionsCameraType, optionsEventType)
     let connect_camera_type = "", connect_event_type = "";
     connect_camera_type = optionsCameraType.filter(item => item.camera_type_name == values.camera_type)[0]._id;
     connect_event_type = optionsEventType.filter(item => item.event_name == values.event_name)[0]._id;
-    console.log("find id: ", connect_camera_type, connect_event_type);
+    // console.log("find id: ", connect_camera_type, connect_event_type);
 
     return {
         ...values,

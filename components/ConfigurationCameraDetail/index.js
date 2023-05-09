@@ -8,7 +8,7 @@ import VideoViewLivestream from "../VideoViewLivestream";
 
 
 export default function ConfigurationCameraDetail({ navigation, route }) {
-    console.log("config camera detailed: ", route.params);
+    // console.log("config camera detailed: ", route.params);
 
     const [cameraInfo, setCameraInfo] = useState([]);
 

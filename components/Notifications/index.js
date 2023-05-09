@@ -125,7 +125,7 @@ export default function Notifications({ navigation }) {
                                                 // setEventsForFlatList(currentEventsList)
 
                                                 setNotificationsList(currentEventsList)
-                                                console.log("currentEventsList: ", currentEventsList)
+                                                // console.log("currentEventsList: ", currentEventsList)
 
                                                 // mapperIotTypes(mapperIoTTypes, mapperIoTConfigs);
 

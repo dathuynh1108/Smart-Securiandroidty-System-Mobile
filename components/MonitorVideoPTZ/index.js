@@ -16,7 +16,7 @@ import { Image } from "react-native";
 const screenHeight = Dimensions.get("window").height;
 
 export default function MonitorVideoPTZ({ route, navigation }) {
-    console.log("video ptz: ", route.params)
+    // console.log("video ptz: ", route.params)
     useEffect(() => {
 
     }, [])

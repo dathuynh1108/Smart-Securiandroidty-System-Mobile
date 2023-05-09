@@ -95,7 +95,7 @@ export default function MonitorVideo({ navigation }) {
   // }
 
   useEffect(() => {
-    console.log("use effect monitor video")
+    // console.log("use effect monitor video")
 
     let areas = [], buildings = [], floors = [], cameraMaps = [], cameraConfigs = []
     AreaAPI.getAll().then(res => {

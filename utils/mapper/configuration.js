@@ -39,7 +39,7 @@ export const mapperEventTypeForSelectionFromDatabaseToFE = (eventType) => {     
 
 
 export const mapperListCameraConfigFromDatabaseToFE = (cameraConfigs, eventsType, cameTypes) => {       // one object
-    console.log("cameraConfigs, eventsType, cameTypes: ", cameraConfigs, eventsType, cameTypes)
+    // console.log("cameraConfigs, eventsType, cameTypes: ", cameraConfigs, eventsType, cameTypes)
     for (let i = 0; i < cameraConfigs.length; i++) {
         let eventName = '', cameraType = '';
         for (let j = 0; j < eventsType.length; j++) {
@@ -66,13 +66,13 @@ export const mapperListCameraConfigFromDatabaseToFE = (cameraConfigs, eventsType
             // "config_zone": cameraConfigs[i]['zone'],
         };
     }
-    console.log("new camera config list: ", cameraConfigs);
+    // console.log("new camera config list: ", cameraConfigs);
 
     return cameraConfigs;
 }
 
 export const mapperListIOTConfigFromDatabaseToFE = (iotConfigs, eventsType, iotTypes) => {       // one object
-    console.log("iotConfigs, eventsType, iotTypes: ", iotConfigs, eventsType, iotTypes)
+    // console.log("iotConfigs, eventsType, iotTypes: ", iotConfigs, eventsType, iotTypes)
 
     for (let i = 0; i < iotConfigs.length; i++) {
         let eventName = '', iotType = '';
@@ -100,7 +100,7 @@ export const mapperListIOTConfigFromDatabaseToFE = (iotConfigs, eventsType, iotT
             "config_zone": iotConfigs[i]['zone'],
         };
     }
-    console.log("new iot config list: ", iotConfigs);
+    // console.log("new iot config list: ", iotConfigs);
 
     return iotConfigs;
 }
@@ -463,7 +463,7 @@ export const mapperListDeviceFromDatabaseToFE = (items, areas = [], buildings = 
 
 
 export const mapperCamerasMapWithCameraConfig = (cameraMaps, cameraConfigs) => {
-    console.log("mapperCamerasMapWithCameraConfig: ", cameraMaps, cameraConfigs)
+    // console.log("mapperCamerasMapWithCameraConfig: ", cameraMaps, cameraConfigs)
     for (let i = 0; i < cameraMaps.length; i++) {
         if (cameraMaps[i].connect_camera != '') {
             for (let j = 0; j < cameraConfigs.length; j++) {

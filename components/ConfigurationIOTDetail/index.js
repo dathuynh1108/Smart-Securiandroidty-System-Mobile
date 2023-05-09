@@ -8,14 +8,14 @@ import { IoTTypeAPI } from "../../apis/IotTypeAPI";
 
 
 export default function ConfigurationIOTDetail({ navigation, route }) {
-    console.log("config iot detailed: ", route.params);
+    // console.log("config iot detailed: ", route.params);
 
     const [iotInfo, setIotInfo] = useState([]);
     const [iotTypeName, setIotTypeName] = useState('');
 
     useEffect(() => {
         setIotInfo(route.params);
-        console.log("route.params: ", route.params)
+        // console.log("route.params: ", route.params)
 
         let iotTypes = [];
         IoTTypeAPI.getAll().then(res => {

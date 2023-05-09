@@ -1,4 +1,4 @@
-import { Dimensions, RefreshControl, Text, View } from "react-native";
+import { Dimensions, RefreshControl, Text, TouchableOpacity, View } from "react-native";
 import '../../styles/appStyles';
 import { appStyles } from "../../styles/appStyles";
 import { styles } from "./styles"
@@ -8,14 +8,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { IoTConfigAPI } from "../../apis/IoTConfigAPI";
 import { EventTypeAPI } from "../../apis/EventType";
 import { mapperIOTConfigListFromDatabaseToFE, mapperListAreaFromDatabaseToFE, mapperListBuildingFromDatabaseToFE, mapperListFloorFromDatabaseToFE } from "../../utils/mapper/configuration";
-import { PieChart, StackedBarChart } from "react-native-chart-kit";
+import { LineChart, PieChart, StackedBarChart } from "react-native-chart-kit";
 import { ScrollView } from "react-native";
 import { AreaAPI } from "../../apis/AreaAPI";
 import { BuildingAPI } from "../../apis/BuildingAPI";
 import { FloorAPI } from "../../apis/FloorAPI";
 import { ReportAPI } from "../../apis/ReportAPI";
-import { columnChartEmpty, getSelectionAreas, getSelectionBuildings, getSelectionFloors, getThingsForColumnChart, helperColumnChart, helperColumnChartMobile } from "../../utils/helper/helperReport";
+import { columnChartEmpty, getSelectionAreas, getSelectionBuildings, getSelectionFloors, getSelectionIotTypes, getThingsForColumnChart, helperAreaChart, helperColumnChart, helperColumnChartMobile, lineChartEmpty } from "../../utils/helper/helperReport";
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
+import { IoTTypeAPI } from "../../apis/IotTypeAPI";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -32,17 +33,20 @@ export default function Report({ navigation }) {
     const [dataPieChart, setDataPieChart] = useState([]);
     const [statisticsCount, setStatisticsCount] = useState([]);
     const [columnChartData, setColumnChartData] = useState(columnChartEmpty)
+    const [lineChartData, setLineChartData] = useState(lineChartEmpty)
     const [visible, setVisible] = useState(false);
     const [visibleColumnChartArea, setVisibleColumnChartArea] = useState(false);
     const [visibleColumnChartInterval, setVisibleColumnChartInterval] = useState(false);
     const [visibleColumnChartIoTType, setvisibleColumnChartIoTType] = useState(false);
     // const [visible, setVisible] = useState(false);
-    const [selectedMenu, setSelectedMenu] = useState('');
+    // const [selectedMenu, setSelectedMenu] = useState('');
     const [selectedMenuText, setSelectedMenuText] = useState('');
     const [selectedMenuTextLineChart, setSelectedMenuTextLineChart] = useState('');
     const [selectedIntervalTypeTextLineChart, setSelectedIntervalTypeTextLineChart] = useState('');
     const [selectedIoTTypeTextLineChart, setSelectedIoTTypeTextLineChart] = useState('');
     const [selectionColumnChart, setSelectionColumnChart] = useState([]);
+    const [selectionIoTTypeLineChart, setSelectionIoTTypeLineChart] = useState([]);
+    const [paramLineChart, setParamLineChart] = useState({})
 
     // const handleDataForPieChart = (events, iotConfigs, eventTypeList) => {
 
@@ -167,7 +171,7 @@ export default function Report({ navigation }) {
         }, 3000);
     }, []);
     const handleSelectMenu = (type, label) => {
-        console.log("type: ", type)
+        // console.log("type: ", type)
         let newParam = {
             'area_id': type,
             'start_time': '2023-01-01T03:38:17.904Z',
@@ -183,6 +187,76 @@ export default function Report({ navigation }) {
         setSelectedMenuText(label)
         hideMenu();
     }
+
+    const handleSelectMenuAreaColumn = (type, label) => {
+        // console.log("type: ", type)
+        let newParam = { ...paramLineChart, 'area_id': type }
+        // console.log("param interval: ", newParam);
+        let statisticsLineChart = [];
+        ReportAPI.getNumberOfIoTEventByInterval(newParam).then(res => {
+            statisticsLineChart = res.data;
+            // console.log(" statisticsLineChart: ", statisticsLineChart);
+            let dataForAreaChart = helperAreaChart(statisticsLineChart, paramLineChart.interval_type);
+            // console.log("dataForAreaChart: ", dataForAreaChart);
+            setLineChartData(prev => dataForAreaChart);
+            setSelectedMenuTextLineChart(label)
+            setParamLineChart({ ...paramLineChart, "area_id": type })
+            hideMenuAreaColumn();
+        })
+
+    }
+
+    const handleSelectMenuIntervalColumn = (type, label) => {
+        // console.log("type: ", type)
+        // let newParam = {
+        //     'area_id': type,
+        //     'start_time': '2023-01-01T03:38:17.904Z',
+        //     'end_time': '2023-12-31T05:38:17.904Z'
+        // }
+
+        // let statisticsColumnChart = [];
+        // ReportAPI.getNumberOfIoTEventByTypeAndTrueAlarm(newParam).then(res => {
+        //     statisticsColumnChart = res.data;
+        //     let resColumnChart = helperColumnChartMobile(statisticsColumnChart);
+        //     setColumnChartData(resColumnChart)
+        // })
+
+
+        let newParam = { ...paramLineChart, 'interval_type': type }
+        // console.log("param interval: ", newParam);
+        let statisticsLineChart = [];
+        ReportAPI.getNumberOfIoTEventByInterval(newParam).then(res => {
+            statisticsLineChart = res.data;
+            // console.log(" statisticsLineChart: ", statisticsLineChart);
+            let dataForAreaChart = helperAreaChart(statisticsLineChart, type);
+            // console.log("dataForAreaChart: ", dataForAreaChart);
+            setLineChartData(prev => dataForAreaChart);
+            setSelectedIntervalTypeTextLineChart(label);
+            setParamLineChart({ ...paramLineChart, "interval_type": type });
+            hideMenuIntervalColumn();
+        })
+
+    }
+
+    const handleSelectMenuIotTypeColumn = (type, label) => {
+        let newParam = { ...paramLineChart, 'iot_device_type_id': type }
+        // console.log("param interval: ", newParam);
+        let statisticsLineChart = [];
+        ReportAPI.getNumberOfIoTEventByInterval(newParam).then(res => {
+            statisticsLineChart = res.data;
+            // console.log(" statisticsLineChart: ", statisticsLineChart);
+            let dataForAreaChart = helperAreaChart(statisticsLineChart, paramLineChart.interval_type);
+            // console.log("dataForAreaChart: ", dataForAreaChart);
+            setLineChartData(prev => dataForAreaChart);
+            setSelectedIoTTypeTextLineChart(label)
+            setParamLineChart({ ...paramLineChart, "iot_device_type_id": type })
+            hideMenuIoTTypeColumn();
+        })
+
+
+
+    }
+
     // const [visible, setVisible] = useState(false);
     const hideMenu = () => setVisible(false);
     const showMenu = () => setVisible(true);
@@ -201,7 +275,7 @@ export default function Report({ navigation }) {
     useEffect(() => {
 
 
-        let allStatisticsCount = [], statisticsColumnChart = [], areas = [], buildings = [], floors = [], statisticsPieChart = []
+        let allStatisticsCount = [], statisticsColumnChart = [], areas = [], buildings = [], floors = [], statisticsPieChart = [], iotTypes = [], statisticsLineChart = [];
         AreaAPI.getAll().then(res => {
             // console.log("get all areas: ", res.data.areas);
             areas = res.data.areas;
@@ -230,51 +304,82 @@ export default function Report({ navigation }) {
                                 setStatisticsCount(allStatisticsCount)
 
 
+                                IoTTypeAPI.getAll().then(res => {
+                                    iotTypes = res.data.iot_device_types;
 
-                                // console.log("statisticsPieChart: ", statisticsPieChart)
+                                    let newParamLineChart = {
+                                        'area_id': areas[0]._id,
+                                        'start_time': '2023-01-01T03:38:17.904Z',
+                                        'end_time': '2023-12-31T05:38:17.904Z',
+                                        'iot_device_type_id': iotTypes[0]._id,
+                                        'interval_type': 'date',
+                                    }
 
-                                // let resPieChart = helperPieChart(statisticsPieChart)
-                                // let thingsForPieChart = getThingsForPieChart(resPieChart);
-                                // // console.log("thingsForPieChart: ", thingsForPieChart)
-                                // setOptionsPieChart(thingsForPieChart.optionsPieChartConstant)
-                                // setSeriesPieChart(thingsForPieChart.seriesPieChartConstant);
+                                    ReportAPI.getNumberOfIoTEventByInterval(newParamLineChart).then(res => {
+                                        statisticsLineChart = res.data;
 
-
-                                setSelectedMenuText(areas[0].area_name)
-                                let resColumnChart = helperColumnChartMobile(statisticsColumnChart);
-                                setColumnChartData(resColumnChart)
-                                // let thingsForColumnChart = getThingsForColumnChart(resColumnChart);
-                                // setOptionsColumnChart(thingsForColumnChart.optionsColumnChartConstant)
-                                // setSeriesColumnChart(thingsForColumnChart.seriesColumnChartConstant);
-
-
-                                // setStatisticsCount(allStatisticsCount)
-                                // setFirstFetch(false);
-                                // setOptionsPieChart(optionsChart)
-                                // setSeriesPieChart(series);
-
-
-
-                                let mapperAreas = mapperListAreaFromDatabaseToFE(areas);
-                                let mapperBuildings = mapperListBuildingFromDatabaseToFE(buildings);
-                                let mapperFloors = mapperListFloorFromDatabaseToFE(floors, mapperBuildings);
-
-                                let selectAreas = getSelectionAreas(mapperAreas);
-                                let selectBuildings = getSelectionBuildings(mapperBuildings);
-                                let selectFloors = getSelectionFloors(mapperFloors);
-                                let selectionForColumnChartCombine = selectAreas.concat(selectBuildings);
-                                selectionForColumnChartCombine = selectionForColumnChartCombine.concat(selectFloors)
-                                console.log("selectionForColumnChartCombine: ", selectionForColumnChartCombine)
-                                setSelectionColumnChart(selectionForColumnChartCombine)
-                                // console.log("mapper areas report: ", selectAreas);
+                                        let dataForAreaChart = helperAreaChart(statisticsLineChart, 'date');
+                                        // console.log("dataForAreaChart: ", dataForAreaChart)
+                                        setLineChartData(prev => dataForAreaChart);
+                                        let selectIoTTypes = getSelectionIotTypes(iotTypes);
+                                        setSelectionIoTTypeLineChart(selectIoTTypes);
+                                        // console.log("iotTypes: ", iotTypes)
+                                        setSelectedIoTTypeTextLineChart(iotTypes[0].iot_device_type_name)
+                                        setParamLineChart(newParamLineChart);
 
 
-                                // setSelectionAreas(selectAreas)
-                                // setSelectionBuildings(selectBuildings);
-                                // setSelectionFloors(selectFloors);
-                                // setDefaultAreaId(newParam.area_id);
-                                // setUserSelectColumnChart({ ...userSelectColumnChart, 'area_name': newParam.area_id, 'start_time': '2023-01-01T00:00:17.904Z', 'end_time': '2023-12-31T23:59:17.904Z' })
-                                // setUserSelectPieChart({ ...userSelectPieChart, 'area_name': newParam.area_id, 'start_time': '2023-01-01T00:00:17.904Z', 'end_time': '2023-12-31T23:59:17.904Z' })
+                                        // console.log("statisticsPieChart: ", statisticsPieChart)
+
+                                        // let resPieChart = helperPieChart(statisticsPieChart)
+                                        // let thingsForPieChart = getThingsForPieChart(resPieChart);
+                                        // // console.log("thingsForPieChart: ", thingsForPieChart)
+                                        // setOptionsPieChart(thingsForPieChart.optionsPieChartConstant)
+                                        // setSeriesPieChart(thingsForPieChart.seriesPieChartConstant);
+
+
+                                        setSelectedMenuText(areas[0].area_name)
+                                        let resColumnChart = helperColumnChartMobile(statisticsColumnChart);
+                                        setColumnChartData(resColumnChart)
+                                        // let thingsForColumnChart = getThingsForColumnChart(resColumnChart);
+                                        // setOptionsColumnChart(thingsForColumnChart.optionsColumnChartConstant)
+                                        // setSeriesColumnChart(thingsForColumnChart.seriesColumnChartConstant);
+
+
+                                        // setStatisticsCount(allStatisticsCount)
+                                        // setFirstFetch(false);
+                                        // setOptionsPieChart(optionsChart)
+                                        // setSeriesPieChart(series);
+
+                                        setSelectedMenuTextLineChart(areas[0].area_name);
+                                        setSelectedIntervalTypeTextLineChart('Ngày')
+
+
+
+                                        let mapperAreas = mapperListAreaFromDatabaseToFE(areas);
+                                        let mapperBuildings = mapperListBuildingFromDatabaseToFE(buildings);
+                                        let mapperFloors = mapperListFloorFromDatabaseToFE(floors, mapperBuildings);
+
+                                        let selectAreas = getSelectionAreas(mapperAreas);
+                                        let selectBuildings = getSelectionBuildings(mapperBuildings);
+                                        let selectFloors = getSelectionFloors(mapperFloors);
+                                        let selectionForColumnChartCombine = selectAreas.concat(selectBuildings);
+                                        selectionForColumnChartCombine = selectionForColumnChartCombine.concat(selectFloors)
+                                        // console.log("selectionForColumnChartCombine: ", selectionForColumnChartCombine)
+                                        setSelectionColumnChart(selectionForColumnChartCombine)
+                                        // console.log("mapper areas report: ", selectAreas);
+
+
+                                        // setSelectionAreas(selectAreas)
+                                        // setSelectionBuildings(selectBuildings);
+                                        // setSelectionFloors(selectFloors);
+                                        // setDefaultAreaId(newParam.area_id);
+                                        // setUserSelectColumnChart({ ...userSelectColumnChart, 'area_name': newParam.area_id, 'start_time': '2023-01-01T00:00:17.904Z', 'end_time': '2023-12-31T23:59:17.904Z' })
+                                        // setUserSelectPieChart({ ...userSelectPieChart, 'area_name': newParam.area_id, 'start_time': '2023-01-01T00:00:17.904Z', 'end_time': '2023-12-31T23:59:17.904Z' })
+                                    })
+                                })
+
+
+
                             })
                         })
                     })
@@ -376,33 +481,40 @@ export default function Report({ navigation }) {
                     absolute
                 /> */}
 
-
-                <Menu
+                <TouchableOpacity
                     style={{
-
+                        backgroundColor: 'white',
+                        height: 30,
+                        // width: 'fit content'
+                        // width: 200,
+                        marginTop: 10,
+                        borderRadius: 5,
+                        justifyContent: 'center',
+                        marginBottom: 20,
                     }}
-                    visible={visible}
-                    anchor={<Text style={{ color: "dodgerblue", fontWeight: 'bold' }} onPress={showMenu}>Chọn khu vực: {selectedMenuText}</Text>}
-                    onRequestClose={hideMenu}
                 >
-                    {
-                        selectionColumnChart.length != 0 ?
-                            selectionColumnChart.map((item, idx) => {
-                                return <MenuItem key={idx} onPress={() => handleSelectMenu(item.value, item.label)}>{item.label}</MenuItem>
-                            })
-                            :
-                            ''
-                    }
-                    {/* <MenuItem onPress={() => handleSelectMenu('camera')}>Camera</MenuItem>
-                    <MenuItem onPress={() => handleSelectMenu('camera_type')}>Loại camera</MenuItem>
-                    <MenuItem onPress={() => handleSelectMenu('iot')}>Cảm biến</MenuItem>
-                    <MenuItem onPress={() => handleSelectMenu('iot_type')}>Loại cảm biến</MenuItem>
-                    <MenuItem onPress={() => handleSelectMenu('event')}>Sự kiện</MenuItem>   */}
-                </Menu>
+
+                    <Menu
+                        style={{
+
+                        }}
+                        visible={visible}
+                        anchor={<Text style={{ color: "dodgerblue", fontWeight: 'bold' }} onPress={showMenu}>Chọn khu vực: {selectedMenuText}</Text>}
+                        onRequestClose={hideMenu}
+                    >
+                        {
+                            selectionColumnChart.length != 0 ?
+                                selectionColumnChart.map((item, idx) => {
+                                    return <MenuItem key={idx} onPress={() => handleSelectMenu(item.value, item.label)}>{item.label}</MenuItem>
+                                })
+                                :
+                                ''
+                        }
+                    </Menu>
+                </TouchableOpacity>
 
 
                 <StackedBarChart
-                    // style={graphStyle}
                     style={{
                         marginTop: 10,
                         borderRadius: 5,
@@ -432,84 +544,135 @@ export default function Report({ navigation }) {
                     marginTop: 40,
                 }}
             >
-                {/* <PieChart
-                    data={dataPieChart}
-                    width={screenWidth}
-                    height={290}
-                    chartConfig={styles.chartConfig}
-                    accessor={"population"}
-                    backgroundColor={"transparent"}
-                    paddingLeft={"15"}
-                    paddingRight={"15"}
-                    center={[10, 10]}
-                    absolute
-                /> */}
 
-
-                <Menu
+                <TouchableOpacity
                     style={{
-
-                    }}
-                    visible={visibleColumnChartArea}
-                    anchor={<Text style={{ color: "dodgerblue", fontWeight: 'bold' }} onPress={showMenuAreaColumn}>Chọn khu vực: { }</Text>}
-                    onRequestClose={hideMenu}
-                >
-                    <MenuItem onPress={() => handleSelectMenu('camera')}>Camera</MenuItem>
-                    <MenuItem onPress={() => handleSelectMenu('camera_type')}>Loại camera</MenuItem>
-                    <MenuItem onPress={() => handleSelectMenu('iot')}>Cảm biến</MenuItem>
-                    <MenuItem onPress={() => handleSelectMenu('iot_type')}>Loại cảm biến</MenuItem>
-                    <MenuItem onPress={() => handleSelectMenu('event')}>Sự kiện</MenuItem>
-                </Menu>
-
-
-                <Menu
-                    style={{
-
-                    }}
-                    visible={visibleColumnChartInterval}
-                    anchor={<Text style={{ color: "dodgerblue", fontWeight: 'bold' }} onPress={showMenu}>Chọn khu vực: {selectedMenuText}</Text>}
-                    onRequestClose={hideMenu}
-                >
-                    {
-                        selectionColumnChart.length != 0 ?
-                            selectionColumnChart.map((item, idx) => {
-                                return <MenuItem key={idx} onPress={() => handleSelectMenu(item.value, item.label)}>{item.label}</MenuItem>
-                            })
-                            :
-                            ''
-                    }
-                    {/* <MenuItem onPress={() => handleSelectMenu('camera')}>Camera</MenuItem>
-                    <MenuItem onPress={() => handleSelectMenu('camera_type')}>Loại camera</MenuItem>
-                    <MenuItem onPress={() => handleSelectMenu('iot')}>Cảm biến</MenuItem>
-                    <MenuItem onPress={() => handleSelectMenu('iot_type')}>Loại cảm biến</MenuItem>
-                    <MenuItem onPress={() => handleSelectMenu('event')}>Sự kiện</MenuItem>   */}
-                </Menu>
-
-
-                <StackedBarChart
-                    // style={graphStyle}
-                    style={{
+                        backgroundColor: 'white',
+                        height: 30,
+                        // width: 'fit content'
+                        // width: '100%',
                         marginTop: 10,
                         borderRadius: 5,
-                        marginRight: 1,
-                        paddingRight: 3,
+                        justifyContent: 'center',
+                        // alignItems: 'baseline'
                     }}
-                    data={columnChartData}
+                >
+
+                    <Menu
+                        style={{
+
+                        }}
+                        visible={visibleColumnChartArea}
+                        anchor={<Text style={{ color: "dodgerblue", fontWeight: 'bold' }} onPress={showMenuAreaColumn}>Khu vực: {selectedMenuTextLineChart}</Text>}
+                        onRequestClose={hideMenuAreaColumn}
+                    >
+
+                        {
+                            selectionColumnChart.length != 0 ?
+                                selectionColumnChart.map((item, idx) => {
+                                    return <MenuItem key={idx} onPress={() => handleSelectMenuAreaColumn(item.value, item.label)}>{item.label}</MenuItem>
+                                })
+                                :
+                                ''
+                        }
+
+
+                        {/* <MenuItem onPress={() => handleSelectMenu('camera')}>Camera</MenuItem>
+                        <MenuItem onPress={() => handleSelectMenu('camera_type')}>Loại camera</MenuItem>
+                        <MenuItem onPress={() => handleSelectMenu('iot')}>Cảm biến</MenuItem>
+                        <MenuItem onPress={() => handleSelectMenu('iot_type')}>Loại cảm biến</MenuItem>
+                        <MenuItem onPress={() => handleSelectMenu('event')}>Sự kiện</MenuItem> */}
+                    </Menu>
+
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={{
+                        backgroundColor: 'white',
+                        height: 30,
+                        // width: 'fit content'
+                        width: 200,
+                        marginTop: 10,
+                        borderRadius: 5,
+                        justifyContent: 'center',
+                    }}
+                // onPress={() => showMenuIntervalColumn}
+                >
+                    <Menu
+                        style={{
+                            // width: '100%'
+                        }}
+                        visible={visibleColumnChartInterval}
+                        anchor={<Text style={{ color: "dodgerblue", fontWeight: 'bold' }} onPress={showMenuIntervalColumn}>Thời gian: {selectedIntervalTypeTextLineChart}</Text>}
+                        onRequestClose={hideMenuIntervalColumn}
+                    >
+                        <MenuItem onPress={() => handleSelectMenuIntervalColumn('date', 'Ngày')}>Ngày</MenuItem>
+                        <MenuItem onPress={() => handleSelectMenuIntervalColumn('week', 'Tuần')}>Tuần</MenuItem>
+                        <MenuItem onPress={() => handleSelectMenuIntervalColumn('month', 'Tháng')}>Tháng</MenuItem>
+                        <MenuItem onPress={() => handleSelectMenuIntervalColumn('year', 'Năm')}>Năm</MenuItem>
+                    </Menu>
+                </TouchableOpacity>
+
+
+                <TouchableOpacity
+                    style={{
+                        backgroundColor: 'white',
+                        height: 30,
+                        // width: 'fit content'
+                        // width: 200,
+                        marginTop: 10,
+                        borderRadius: 5,
+                        justifyContent: 'center',
+                        marginBottom: 20,
+                    }}
+                // onPress={() => showMenuIntervalColumn}
+                >
+                    <Menu
+                        style={{
+                            // width: '100%'
+                        }}
+                        visible={visibleColumnChartIoTType}
+                        anchor={<Text style={{ color: "dodgerblue", fontWeight: 'bold' }} onPress={showMenuIoTTypeColumn}>Loại cảm biến: {selectedIoTTypeTextLineChart}</Text>}
+                        onRequestClose={hideMenuIoTTypeColumn}
+                    >
+
+                        {
+                            selectionIoTTypeLineChart.length != 0 ?
+                                selectionIoTTypeLineChart.map((item, idx) => {
+                                    return <MenuItem key={idx} onPress={() => handleSelectMenuIotTypeColumn(item.value, item.label)}>{item.label}</MenuItem>
+                                })
+                                :
+                                ''
+                        }
+
+                        {/* <MenuItem onPress={() => handleSelectMenuIntervalColumn('date', 'Ngày')}>Ngày</MenuItem>
+                        <MenuItem onPress={() => handleSelectMenuIntervalColumn('week', 'Tuần')}>Tuần</MenuItem>
+                        <MenuItem onPress={() => handleSelectMenuIntervalColumn('month', 'Tháng')}>Tháng</MenuItem>
+                        <MenuItem onPress={() => handleSelectMenuIntervalColumn('year', 'Năm')}>Năm</MenuItem> */}
+                    </Menu>
+                </TouchableOpacity>
+
+                <LineChart
+                    data={lineChartData}
                     width={screenWidth}
-                    height={290}
-                    center={[10, 10]}
+                    height={220}
                     chartConfig={styles.chartConfig}
-                    backgroundColor={"transparent"}
+                    style={{
+                        // marginTop: 5,
+                        borderRadius: 5,
+                        // marginRight: 1,
+                        // paddingRight: 3,
+                    }}
                 />
 
                 <Text style={{
                     textAlign: 'center',
                     fontStyle: 'italic',
                 }}>
-                    Thống kê số lần báo động giả và thật của từng loại cảm biến
+                    Thống kê số lần báo động của loại cảm biến
                 </Text>
             </View>
 
-        </ScrollView>
+        </ScrollView >
     );
 }

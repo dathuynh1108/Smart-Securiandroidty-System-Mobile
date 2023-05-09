@@ -238,7 +238,7 @@ export default function Event({ navigation }) {
 
     useEffect(() => {
         /* call api to get iotDevicesMap, cameraDevicesMap, dataIOTDevicesConfig, dataEvents, dataEventsType */
-        console.log("use effect event")
+        // console.log("use effect event")
         let areas = [], buildings = [], floors = [], iotMaps = [], cameraMaps = [], events = [], eventTypes = [], newSeries = [], iotConfigs = [], cameraConfigs = [], iotTypes = []
 
         AreaAPI.getAll().then(res => {
