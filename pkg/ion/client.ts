@@ -105,8 +105,13 @@ export default class Client {
       codec: 'h264',
       iceServers: [
         {
-          urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'],
+          urls: "stun:stun.l.google.com:19302",
         },
+        {
+          urls: ['turn:turnserver.trueid.vn:3478?transport=udp'],
+          username: 'trueid01',
+          credential: 'password01',
+        }
       ],
     },
   ) {
