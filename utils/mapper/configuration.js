@@ -207,6 +207,7 @@ export const mapperEventDetailFromDatabaseToFE = (item, iotConfigs = []) => {
         "created_at": item.created_at,
         "confirm_status": item.event_status,
         "zone": zoneValue,        // need to find zone from this field
+        // "event_time": item.created_at,
     }
 }
 

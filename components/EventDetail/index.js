@@ -56,6 +56,7 @@ export default function EventDetail({ navigation, route }) {
 
     useEffect(() => {
         if (firstFetch) {
+            console.log("route.params: ", route.params)
             setEventDetailInfo(route.params);
             setEventDetailInfoOriginal(route.params);
             // setTrueAlarmRadio(route.params.true_alarm ? 'true' : 'false');
@@ -121,12 +122,22 @@ export default function EventDetail({ navigation, route }) {
                     <Text style={styles.eventDetailRight}></Text>
                 </View>
                 <TouchableOpacity style={styles.imageViewBlock}>
+                    <Text>a</Text>
                     <ImageModal
                         resizeMode="contain"
                         style={{ width: 300, height: 300, }}
                         // source={{ uri: 'https://media.istockphoto.com/id/621984692/photo/traffic-security-camera.jpg?s=612x612&w=0&k=20&c=w1TrTBvor2fNfBPxfFpuTm5fShzkuHgRoVVUJcTK1sA=', }}
-                        source={{ uri: 'https://scontent.xx.fbcdn.net/v/t1.15752-9/344289776_256146703543999_2352939010781704110_n.png?stp=dst-png_p206x206&_nc_cat=101&ccb=1-7&_nc_sid=aee45a&_nc_ohc=vWV8s4JXthgAX_jEiar&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdQtM-bKXdsXOF4mD4Szm2dShE9eJFK2gPrSFiJDUHuoRA&oe=647F0F6F', }}
+                        // source={{ uri: 'https://scontent.xx.fbcdn.net/v/t1.15752-9/344289776_256146703543999_2352939010781704110_n.png?stp=dst-png_p206x206&_nc_cat=101&ccb=1-7&_nc_sid=aee45a&_nc_ohc=vWV8s4JXthgAX_jEiar&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdQtM-bKXdsXOF4mD4Szm2dShE9eJFK2gPrSFiJDUHuoRA&oe=647F0F6F', }}
+                        source={{ uri: 'http://192.168.10.103:5005/static/general/image/20230519-154622-d81c69f21949456e8fe76744e9669965.jpg', }}
                     />
+
+                    {/* <Image
+                        // style={styles.logo}
+                        source={{
+                            uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
+                        }}
+                    /> */}
+
                 </TouchableOpacity>
                 {/* <ImageModal
                     resizeMode="contain"
