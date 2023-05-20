@@ -11,7 +11,7 @@ export const CameraConfigAPI = {
     },
 
     update: async function (item, cancel = false) {
-        const response = await api.request({    
+        const response = await api.request({
             url: `/api/cameras/${item._id}`,
             method: "PUT",
             data: item,
@@ -40,4 +40,17 @@ export const CameraConfigAPI = {
         return response.data
     },
 
+    put: async function (item, params) {
+        try {
+            const response = await api.request({
+                url: `/api/cameras`,
+                method: "PUT",
+                data: item,
+                params: params,
+            })
+            return response.data
+        } catch (error) {
+            throw error;
+        }
+    },
 }

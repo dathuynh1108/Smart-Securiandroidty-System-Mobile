@@ -1,7 +1,7 @@
 import axios from "axios"
 
 export const sfuAddress = "ws://192.168.10.103:8080/ws"
-
+export const IP_ADDRESS = '192.168.10.103'
 export const api = axios.create({
     // baseURL: "https://pokeapi.co/api/v2",
     baseURL: "http://192.168.10.103:3001",

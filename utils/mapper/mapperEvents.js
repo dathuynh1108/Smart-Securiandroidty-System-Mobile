@@ -1,3 +1,4 @@
+import { IP_ADDRESS } from "../../apis/configs/axiosConfig";
 
 // items, iotConfigs, eventTypes, iotMaps, cameraMaps, areas, buildings, floors, iotTypes, endIdx = 0
 export const mapperEventsUtils = (items, iotConfigs, eventTypes, iotMaps, cameraMaps, areas, buildings, floors, iotTypes, endIdx = 0, cameraConfigs, cameraTypes) => {
@@ -86,7 +87,14 @@ export const mapperEventsUtils = (items, iotConfigs, eventTypes, iotMaps, camera
                 created_at: event.created_at ? new Date(event.created_at).toString() : "No time",
                 key: event._id,
 
-                video_url: event.detection_image_url ? event.detection_image_url : 'https://www.datasciencecentral.com/wp-content/uploads/2021/10/9712908078.jpeg'
+
+                normal_image_url: event.normal_image_url ? event.normal_image_url.replace('localhost', IP_ADDRESS) : '',
+
+                video_url: event.detection_image_url ? event.detection_image_url : 'https://www.datasciencecentral.com/wp-content/uploads/2021/10/9712908078.jpeg',
+
+
+
+                detection_image_url: event.detection_image_url ? event.detection_image_url.replace('locahost', IP_ADDRESS) : '',
             }
         } else {
             let iot_config_name = '', iot_map_name = '', area_id = '', area_name = '', building_name = '', floor_name = '', address = '', iot_type_id = '', iot_type_name = '', event_type_id = '', event_name = '', area_obj = {}, building_id = '', floor_level = '', device_name = ''
@@ -146,10 +154,13 @@ export const mapperEventsUtils = (items, iotConfigs, eventTypes, iotMaps, camera
                 key: event._id,
 
 
+                normal_image_url: event.normal_image_url ? event.normal_image_url.replace('localhost', IP_ADDRESS) : '',
+
                 zone: event.zone ? event['zone'] : 'Không có',
                 video_url: event.detection_image_url ? event.detection_image_url : 'https://www.datasciencecentral.com/wp-content/uploads/2021/10/9712908078.jpeg',
                 normal_video_url: event.normal_video_url ? event.normal_video_url.replace('controller', 'localhost') : '',
 
+                detection_image_url: event.detection_image_url ? event.detection_image_url.replace('locahost', IP_ADDRESS) : '',
             }
         }
     })
