@@ -10,11 +10,13 @@ const config = {
     sdpSemantics: 'unified-plan',
     iceServers: [
         {
-            urls: "stun:stun.l.google.com:19302",
+          urls: "stun:stun.l.google.com:19302",
         },
         {
-            urls: "stun:stun.stunprotocol.org:3478",
-        },
+          urls: ['turn:turnserver.trueid.vn:3478?transport=udp'],
+          username: 'trueid01',
+          credential: 'password01',
+        }
     ],
 };
 export interface Props {
