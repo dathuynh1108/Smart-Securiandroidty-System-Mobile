@@ -1,10 +1,11 @@
 import axios from "axios"
 
-export const sfuAddress = "ws://192.168.10.103:8080/ws"
-export const IP_ADDRESS = '192.168.10.103'
+export const sfuAddress = "ws://192.168.203.47:8080/ws"
+export const IP_ADDRESS = '192.168.203.47'
+export const ip_global = '192.168.203.47'
 export const api = axios.create({
     // baseURL: "https://pokeapi.co/api/v2",
-    baseURL: "http://192.168.10.103:3001",
+    baseURL: "http://192.168.203.47:3001",
 })
 
 // defining a custom error handler for all APIs

@@ -29,6 +29,7 @@ import { useCallback } from "react";
 import { RefreshControl } from "react-native";
 import { CameraTypeAPI } from "../../apis/CameraTypeAPI";
 import { sortEventOnCreatedAt } from "../../utils/helper/helper";
+import { ip_global } from "../../apis/configs/axiosConfig";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -368,6 +369,7 @@ export default function Dashboard({ route, navigation }) {
 
                 {recentEvents && recentEvents.map((event, index) => {
                     let url = event.video_url;
+                    console.log("event: ", event)
                     return <View key={index}>
                         <View style={styles.recentEventBlock}>
                             <View>
@@ -376,7 +378,8 @@ export default function Dashboard({ route, navigation }) {
                                     imageBackgroundColor="#000000"
                                     style={{ width: 150, height: 150, }}
                                     // source={{ uri: url, }}
-                                    source={{ uri: 'https://scontent.xx.fbcdn.net/v/t1.15752-9/344289776_256146703543999_2352939010781704110_n.png?stp=dst-png_p206x206&_nc_cat=101&ccb=1-7&_nc_sid=aee45a&_nc_ohc=vWV8s4JXthgAX_jEiar&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdQtM-bKXdsXOF4mD4Szm2dShE9eJFK2gPrSFiJDUHuoRA&oe=647F0F6F', }}
+                                    // source={{ uri: 'https://scontent.xx.fbcdn.net/v/t1.15752-9/344289776_256146703543999_2352939010781704110_n.png?stp=dst-png_p206x206&_nc_cat=101&ccb=1-7&_nc_sid=aee45a&_nc_ohc=vWV8s4JXthgAX_jEiar&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdQtM-bKXdsXOF4mD4Szm2dShE9eJFK2gPrSFiJDUHuoRA&oe=647F0F6F', }}
+                                    source={{ uri: event.detection_image_url ? event.detection_image_url.replace('localhost', ip_global) : event.normal_image_url, }}
                                 />
                             </View>
                             <View style={styles.recentEventInfoRight}>
