@@ -13,10 +13,10 @@ const config = {
           urls: "stun:stun.l.google.com:19302",
         },
         {
-          urls: ['turn:turnserver.trueid.vn:3478?transport=udp'],
-          username: 'trueid01',
-          credential: 'password01',
-        }
+            urls: ['turn:smartss.click:3478'],
+            username: 'dathuynh11082001',
+            credential: 'dathuynh11082001',
+        }, 
     ],
 };
 export interface Props {
