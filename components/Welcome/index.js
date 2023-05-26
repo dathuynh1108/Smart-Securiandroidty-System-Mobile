@@ -126,7 +126,7 @@ export default function Welcome({ navigation }) {
             {/*<Tab.Screen name="Profile" component={Report} options={{ title: "Profile" }} />*/}
             <Tab.Screen name="Notifications" component={Notifications} options={{ title: "Notifications" }} />
             <Tab.Screen name="Personal" component={Personal} options={{ title: "Personal" }} />
-            <Tab.Screen name="VideoViewLivestream" component={VideoViewLivestream} options={{ title: "VideoViewLivestream" }} />
+            {/* <Tab.Screen name="VideoViewLivestream" component={VideoViewLivestream} options={{ title: "VideoViewLivestream" }} /> */}
             {/* <Tab.Screen name="VideoView" component={VideoView} options={{ title: "VideoView" }} /> */}
         </Tab.Navigator>
 

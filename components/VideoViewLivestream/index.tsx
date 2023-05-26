@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { SafeAreaView, Text } from 'react-native'
+import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
 import { Client } from "../../pkg/ion";
 import { IonSFUJSONRPCSignal } from "../../pkg/ion/signal/json-rpc-impl";
 import uuid from "react-native-uuid";
@@ -33,6 +33,7 @@ const VideoView: React.FC<Props> = (props) => {
     const [message, setMessage] = useState("Connecting to camera...")
 
     const roomName = useRef<string>("");
+    const navigationInside = props.navigation;
     useEffect(() => {
         roomName.current = props.roomName ? props.roomName : "rtsp://tris.ddns.net:5564/Streaming/Channels/102?transportmode=unicast&profile=Profile_2";
         const useEffectRoomName = roomName.current;
@@ -81,12 +82,20 @@ const VideoView: React.FC<Props> = (props) => {
             {message ? <Text>{message}</Text> : ""}
             {
                 remoteStream &&
-                <RTCView
-                    objectFit={"contain"}
-                    zOrder={20}
-                    streamURL={remoteStream.toURL()}
-                    style={styles.videoTag}
-                />
+                <TouchableOpacity
+                    onPress={() => {
+                        console.log("press video")
+                        navigationInside.navigate('MonitorVideoPTZ', roomName)
+                    }}
+                >
+                    <RTCView
+                        objectFit={"contain"}
+                        zOrder={20}
+                        streamURL={remoteStream.toURL()}
+                        style={styles.videoTag}
+
+                    />
+                </TouchableOpacity>
             }
         </SafeAreaView>
     );

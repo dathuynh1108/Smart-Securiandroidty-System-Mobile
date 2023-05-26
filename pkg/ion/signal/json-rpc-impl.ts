@@ -4,6 +4,7 @@ import { Trickle } from '../client';
 import {RTCSessionDescriptionInit} from "react-native-webrtc/lib/typescript/RTCSessionDescription"
 class IonSFUJSONRPCSignal implements Signal {
   protected socket: WebSocket;
+  protected pingInterval: any;
   private _onopen?: () => void;
   private _onclose?: (ev: Event) => void;
   private _onerror?: (error: Event) => void;
@@ -18,6 +19,7 @@ class IonSFUJSONRPCSignal implements Signal {
 
     this.socket.addEventListener('open', () => {
       if (this._onopen) this._onopen();
+      this.pingInterval = setInterval(() => this.notify('ping', ""), 5000)
     });
 
     this.socket.addEventListener('error', (e) => {
@@ -98,6 +100,7 @@ class IonSFUJSONRPCSignal implements Signal {
   }
 
   close() {
+    if (this.pingInterval) clearInterval(this.pingInterval)
     this.socket.close();
   }
 
@@ -115,4 +118,4 @@ class IonSFUJSONRPCSignal implements Signal {
   }
 }
 
-export { IonSFUJSONRPCSignal }
+export { IonSFUJSONRPCSignal };

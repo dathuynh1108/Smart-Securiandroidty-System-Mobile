@@ -1,4 +1,4 @@
-import {StyleSheet} from "react-native";
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
     menuContainer: {
@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         marginLeft: 10,
         marginRight: 10,
-        marginTop: 10,
+        marginTop: 20,
+        marginBottom: 20,
     }
 });

@@ -1,4 +1,4 @@
-import {Platform, StyleSheet} from "react-native";
+import { Platform, StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
 
@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
         paddingLeft: 10,
     },
     itemSecond: {
-        width: '20%', backgroundColor: '#D0D5DD', textAlignVertical: "center",
+        width: '30%', backgroundColor: '#D0D5DD', textAlignVertical: "center",
         textAlign: "right",
         ...Platform.select({
             ios: {
@@ -38,7 +38,7 @@ export const styles = StyleSheet.create({
         })
     },
     itemThird: {
-        width: '30%', backgroundColor: '#D0D5DD', textAlignVertical: "center",
+        width: '20%', backgroundColor: '#D0D5DD', textAlignVertical: "center",
         textAlign: "right",
         paddingRight: 10,
         ...Platform.select({
@@ -55,9 +55,9 @@ export const styles = StyleSheet.create({
         justifyContent: 'space-around'
     },
 
-    headerFirst: {width: '50%',  fontWeight: "bold", },
-    headerSecond: {width: '20%', fontWeight: "bold", textAlign: "right"},
-    headerThird: {width: '30%',  fontWeight: "bold", textAlign: "right"},
+    headerFirst: { width: '50%', fontWeight: "bold", },
+    headerSecond: { width: '20%', fontWeight: "bold", textAlign: "right" },
+    headerThird: { width: '30%', fontWeight: "bold", textAlign: "right" },
 
     flatListStyle: {
         flexGrow: 0,

@@ -1,11 +1,12 @@
-import {FlatList, Platform, Text, TouchableOpacity, View} from "react-native";
-import {MenuView} from "@react-native-menu/menu";
+import { FlatList, Platform, Text, TouchableOpacity, View } from "react-native";
+import { MenuView } from "@react-native-menu/menu";
 import { Button, Menu, Divider, Provider } from 'react-native-paper';
-import {useEffect, useState} from "react";
-import {styles} from "./styles";
+import { useEffect, useState } from "react";
+import { styles } from "./styles";
+import { IoTConfigAPI } from "../../apis/IoTConfigAPI";
 
 
-export default function ConfigurationIOTList ({navigation, iotList}) {
+export default function ConfigurationIOTList({ navigation, iotList }) {
 
     // console.log("config iot list: ", camerasList);
 
@@ -13,7 +14,7 @@ export default function ConfigurationIOTList ({navigation, iotList}) {
     const FlatListItem = (item, index) => {
         return <TouchableOpacity onPress={() => navigation.navigate('ConfigurationIOTDetail', item)}>
             <View style={styles.itemBlock}>
-                <Text style={styles.itemFirst}>{item.name}</Text>
+                <Text style={styles.itemFirst}>{item.iot_device_name}</Text>
                 <Text style={styles.itemSecond}>{item.zone}</Text>
                 <Text style={styles.itemThird}>{item.status}</Text>
             </View>
@@ -28,19 +29,27 @@ export default function ConfigurationIOTList ({navigation, iotList}) {
             </View>
         )
     }
-    const mapperIOTsList = (iots) => {
-        iots = iots.map((ele, key) => {
-            let name = ele['name'];
-            let zone = ele['zone'];
-            let status = ele['status'] == 'free' ? 'Trống' : 'Đã sử dụng';
-            return {...ele, name, zone, status}
-        })
-        setData(iots);
-    }
+    // const mapperIOTsList = (iots) => {
+    //     iots = iots.map((ele, key) => {
+    //         let name = ele['name'];
+    //         let zone = ele['zone'];
+    //         let status = ele['status'] == 'free' ? 'Trống' : 'Đã sử dụng';
+    //         return { ...ele, name, zone, status }
+    //     })
+    //     setData(iots);
+    // }
 
 
     useEffect(() => {
-        mapperIOTsList(iotList)
+
+        let iotConfigs = [];
+        IoTConfigAPI.getAll().then(res => {
+            iotConfigs = res.data.iot_devices;
+
+            setData(iotConfigs)
+        })
+
+        // mapperIOTsList(iotList)
     }, [iotList])
 
 
@@ -50,7 +59,7 @@ export default function ConfigurationIOTList ({navigation, iotList}) {
             <FlatList
                 style={styles.flatListStyle}
                 data={data}
-                renderItem={({item, index}) => {
+                renderItem={({ item, index }) => {
                     return (FlatListItem(item, index));
                 }}
                 keyExtractor={(item, index) => index.toString()}

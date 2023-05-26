@@ -4,6 +4,7 @@ import { Button, Menu, Divider, Provider } from 'react-native-paper';
 import { useEffect, useState } from "react";
 import { styles } from "./styles";
 import ImageModal from "react-native-image-modal";
+import { EventTypeAPI } from "../../apis/EventType";
 
 export default function ConfigurationEventList({ navigation, eventTypeConfigList }) {
 
@@ -12,9 +13,9 @@ export default function ConfigurationEventList({ navigation, eventTypeConfigList
         let url = item.image_url
         return <TouchableOpacity >
             <View style={styles.itemBlock}>
-                <Text style={styles.itemFirst}>{item.id}</Text>
+                <Text style={styles.itemFirst}>{item._id}</Text>
                 <Text style={styles.itemSecond}>{item.event_name}</Text>
-                <Text style={styles.itemSecond}>{item.description}</Text>
+                <Text style={styles.itemSecond}>{item.event_description}</Text>
                 {/* <TouchableOpacity>
                     <ImageModal
                         resizeMode="contain"
@@ -36,7 +37,14 @@ export default function ConfigurationEventList({ navigation, eventTypeConfigList
     }
 
     useEffect(() => {
-        setData(eventTypeConfigList)
+
+        let eventTypes = [];
+        EventTypeAPI.getAll().then(res => {
+            eventTypes = res.data.event_types;
+            setData(eventTypes)
+        })
+
+        // setData(eventTypeConfigList)
     }, [eventTypeConfigList])
 
 

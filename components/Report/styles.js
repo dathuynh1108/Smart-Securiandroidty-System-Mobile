@@ -117,13 +117,24 @@ export const styles = StyleSheet.create({
     },
 
     chartConfig: {
-        backgroundGradientFrom: "#1E2923",
+        // backgroundGradientFrom: "#1E2923",
+        // backgroundGradientFromOpacity: 21,
+        // backgroundGradientTo: "#08130D",
+        backgroundGradientFrom: "#adbac0",
         backgroundGradientFromOpacity: 21,
-        backgroundGradientTo: "#08130D",
+        backgroundGradientTo: "#c1c1c3",
         backgroundGradientToOpacity: 0.5,
-        color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+        // color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+        color: (opacity = 1) => `dodgerblue`,
         strokeWidth: 2, // optional, default 3
         barPercentage: 0.5,
-        useShadowColorFromDataset: false // optional
+        useShadowColorFromDataset: false, // optional,
+        propsForLabels: {
+            fontSize: "10"
+        },
+        // labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+        labelColor: (opacity = 1) => `#5d5e61`,
+        decimalPlaces: 2,
+
     }
 });

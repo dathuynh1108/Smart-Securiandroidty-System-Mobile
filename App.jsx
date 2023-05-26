@@ -17,6 +17,7 @@ import Notifications from "./components/Notifications";
 import { Provider } from 'react-redux';
 
 import store from './global/store';
+import MonitorVideoPTZ from './components/MonitorVideoPTZ';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,6 +39,7 @@ export default function App() {
                     <Stack.Screen name="ConfigurationCameraDetail" component={ConfigurationCameraDetail} options={{ title: 'Chi tiết camera' }} />
                     <Stack.Screen name="ConfigurationIOTDetail" component={ConfigurationIOTDetail} options={{ title: 'Chi tiết cảm biến' }} />
                     <Stack.Screen name="Monitor" component={Monitor} options={{ title: 'Giám sát' }} />
+                    <Stack.Screen name="MonitorVideoPTZ" component={MonitorVideoPTZ} options={{ title: 'Điều khiển camera' }} />
                     <Stack.Screen name="Dashboard" component={Dashboard} options={{ title: 'Tổng quát' }} />
                     <Stack.Screen name="Report" component={Report} options={{ title: 'Báo cáo' }} />
                     {/* <Stack.Screen name="Login" component={Login} options={{title: 'Trang đăng nhập'}}/> */}

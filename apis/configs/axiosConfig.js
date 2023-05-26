@@ -1,6 +1,5 @@
 import axios from "axios"
 export const sfuAddress = "wss://smartss.click/controller/ws"
-
 export const api = axios.create({
     // baseURL: "https://pokeapi.co/api/v2",
     baseURL: "https://smartss.click/api-gateway",
@@ -29,6 +28,6 @@ const errorHandler = (error) => {
 // registering the custom error handler to the
 // "api" axios instance
 api.interceptors.response.use(undefined, (error) => {
-    // do something with RESPONSE error
+    // do something with RESPONSE error 
     return errorHandler(error)
 })
