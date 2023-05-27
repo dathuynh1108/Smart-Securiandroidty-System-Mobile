@@ -10,6 +10,7 @@
         "test": "jest"
     },
     "dependencies": {
+        "@notifee/react-native": "^7.7.1",
         "@react-native-community/datetimepicker": "^7.0.1",
         "@react-native-menu/menu": "^0.7.3",
         "@react-navigation/material-top-tabs": "^6.6.2",
@@ -22,6 +23,7 @@
         "react": "18.2.0",
         "react-native": "^0.71.7",
         "react-native-chart-kit": "^6.12.0",
+        "react-native-dotenv": "^3.4.8",
         "react-native-fast-image": "^8.6.3",
         "react-native-google-places-autocomplete": "^2.5.1",
         "react-native-image-modal": "^2.0.4",
@@ -38,7 +40,9 @@
         "react-native-vector-icons": "^9.2.0",
         "react-native-video": "^5.2.1",
         "react-native-webrtc": "^111.0.0",
-        "react-redux": "^8.0.5"
+        "react-redux": "^8.0.5",
+        "socket.io": "^4.6.1",
+        "socket.io-client": "^4.6.1"
     },
     "devDependencies": {
         "@babel/core": "^7.20.0",

@@ -26,6 +26,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { mapperEventsUtils } from "../../utils/mapper/mapperEvents";
 import { useCallback } from "react";
 import { CameraTypeAPI } from "../../apis/CameraTypeAPI";
+import * as socket from "socket.io-client";
+import { BASE_URL, SOCKET_URL } from "../../constants/server";
+import notifee from '@notifee/react-native';
 
 
 export default function Event({ navigation }) {
@@ -57,9 +60,97 @@ export default function Event({ navigation }) {
     const [eventTypes, setEventTypes] = useState([]);
     const [iotTypes, setIotsType] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
-    const onRefresh = useCallback(() => {
+
+    const onRefreshEffect = useCallback((noti = false) => {
         setRefreshing(true);
         setTimeout(() => {
+
+            setRefreshing(false);
+        }, 3000);
+    })
+
+    const onRefresh = useCallback((noti = false) => {
+        setRefreshing(true);
+        setTimeout(() => {
+            let areas = [], buildings = [], floors = [], iotMaps = [], cameraMaps = [], events = [], eventTypes = [], newSeries = [], iotConfigs = [], cameraConfigs = [], iotTypes = [], cameraTypes = [];
+
+            AreaAPI.getAll().then(res => {
+                areas = res.data.areas;
+
+                BuildingAPI.getAll().then(res => {
+                    buildings = res.data.areas;
+
+                    FloorAPI.getAll().then(res => {
+                        floors = res.data.areas;
+
+                        IoTMapAPI.getAll().then(res => {
+                            iotMaps = res.data.iot_device_maps;
+
+                            CameraMapAPI.getAll().then(res => {
+                                cameraMaps = res.data.camera_maps;
+
+                                IoTConfigAPI.getAll().then(res => {
+                                    iotConfigs = res.data.iot_devices;
+
+                                    CameraConfigAPI.getAll().then(res => {
+                                        cameraConfigs = res.data.cameras
+
+                                        EventAPI.getAll().then(res => {
+                                            events = res.data.events;
+
+                                            EventTypeAPI.getAll().then(res => {
+                                                eventTypes = res.data.event_types;
+
+                                                IoTTypeAPI.getAll().then(res => {
+                                                    iotTypes = res.data.iot_device_types;
+
+                                                    CameraTypeAPI.getAll().then(res => {
+                                                        cameraTypes = res.data.camera_types;
+
+                                                        let mapperAreas = mapperListAreaFromDatabaseToFE(areas);
+                                                        let mapperBuildings = mapperListBuildingFromDatabaseToFE(buildings);
+                                                        let mapperFloors = mapperListFloorFromDatabaseToFE(floors, mapperBuildings);
+                                                        let devices = cameraMaps.concat(iotMaps);
+                                                        let mapperDevices = mapperListDeviceFromDatabaseToFE(devices, mapperAreas, mapperBuildings, mapperFloors)
+                                                        let mapperIoTMaps = mapperDevices.filter(item => item.type == 'iot')
+                                                        let mapperCameraMaps = mapperDevices.filter(item => item.type == 'camera')
+                                                        let mapperIoTConfigs = mapperIOTConfigListFromDatabaseToFE(iotConfigs);
+                                                        let mapperCameraConfigs = mapperListCameraConfigurationFromDatabaseToFE(cameraConfigs);
+                                                        let mapperIoTTypes = mapperListIOTTypeFromDatabaseToFE(iotTypes);
+                                                        // let mapperEvents = mapperListEventDetailFromDatabaseToFE(events)     // need to remove EventAPI get all
+                                                        let mapperEvents = mapperListEventDetailFromDatabaseToFE(events, mapperIoTConfigs)
+
+                                                        newSeries = [iotMaps.length, cameraMaps.length]
+
+
+                                                        setAreasList(mapperAreas);
+                                                        setBuildingsList(mapperBuildings);
+                                                        setFloorsList(mapperFloors)
+                                                        setIotDevices(mapperIoTMaps);           // map
+                                                        setCameraDevices(mapperCameraMaps);     // map
+                                                        setEventTypes(eventTypes);
+                                                        setIotConfigurations(mapperIoTConfigs);
+                                                        setIotsType(mapperIoTTypes)
+                                                        let currentEventsList = mapperEventsUtils(mapperEvents, mapperIoTConfigs, eventTypes, mapperIoTMaps, mapperCameraMaps, mapperAreas, mapperBuildings, mapperFloors, mapperIoTTypes, mapperEvents.length, mapperCameraConfigs, cameraTypes);
+                                                        let sortedEvents = sortEventOnCreatedAt(currentEventsList);
+                                                        setEventsForFlatList(sortedEvents)
+                                                        setFirstFetch(false);
+
+                                                        if (noti) {
+                                                            onDisplayNotification(sortedEvents[0]);
+                                                        }
+                                                    })
+
+                                                })
+                                            })
+                                        })
+                                    })
+                                })
+                            })
+                        })
+                    })
+                })
+            })
             setRefreshing(false);
         }, 3000);
     }, []);
@@ -130,121 +221,30 @@ export default function Event({ navigation }) {
         // setEventsList(originalData);
         // mapperEvents(originalData)
 
-        let currentEventsList = originalEventsListRedux;
-        let mapperEvents = mapperListEventDetailFromDatabaseToFE(currentEventsList, iotConfigurations);
-        // mapperRecentEvents(mapperEvents, iotConfigurations, eventTypes, iotDevices, cameraDevices);
-        let currentEventsListMapperUtils = mapperEventsUtils(mapperEvents, iotConfigurations, eventTypes, iotDevices, cameraDevices, areasList, buildingsList, floorsList, iotTypes, mapperEvents.length);
-        setEventsForFlatList(currentEventsListMapperUtils)
+
+        onRefresh();
+        // let currentEventsList = originalEventsListRedux;
+        // let mapperEvents = mapperListEventDetailFromDatabaseToFE(currentEventsList, iotConfigurations);
+        // // mapperRecentEvents(mapperEvents, iotConfigurations, eventTypes, iotDevices, cameraDevices);
+        // let currentEventsListMapperUtils = mapperEventsUtils(mapperEvents, iotConfigurations, eventTypes, iotDevices, cameraDevices, areasList, buildingsList, floorsList, iotTypes, mapperEvents.length);
+        // setEventsForFlatList(currentEventsListMapperUtils)
     }
     const helperDateISO = (date) => {
         let convertDate = new Date(date).toISOString();
         return convertDate.split('T')[0];
     }
     const handleSearchEventsList = () => {
+
+
+        onRefreshEffect();
+
+
         console.log(convertDate(startDate))
         console.log(convertDate(endDate))
         let startDateObject = Date.parse(convertDate(startDate));
         let endDateObject = Date.parse(convertDate(endDate));
 
-        // set events list
-        // let currentEventsList = eventsList;
-        let currentEventsList = originalEventsListRedux;
-        // console.log("currentEventsList EVENT: ", currentEventsList)
-        currentEventsList = currentEventsList.filter((event, index) => {
 
-            // let convertedCreatedAt = helperDateISO(event.created_at);
-            let convertedCreatedAt = helperDateISO(event.event_time);
-            let eventDateObject = Date.parse(convertedCreatedAt);
-            if (startDateObject <= eventDateObject && eventDateObject <= endDateObject) {
-                return event;
-            }
-
-            // console.log("event date: ", new Date(event.created_at).toISOString())
-            // let date = event.created_at.substring(0, event.created_at.indexOf(','));
-            // let dateSplit = date.split('/');
-            // let dd = Platform.OS == 'ios' ? (dateSplit[0].length == 1 ? '0' + dateSplit[0] : dateSplit[0]) : (dateSplit[1].length == 1 ? '0' + dateSplit[1] : dateSplit[1]);
-            // let mm = Platform.OS == 'ios' ? (dateSplit[1].length == 1 ? '0' + dateSplit[1] : dateSplit[1]) : (dateSplit[0].length == 1 ? '0' + dateSplit[0] : dateSplit[0]);
-            // let yyyy = dateSplit[2];
-            // let eventDate = yyyy + '-' + mm + '-' + dd;
-            // // console.log("event date: ", eventDate)
-            // let eventDateObject = Date.parse(eventDate);
-            // if (startDateObject <= eventDateObject && eventDateObject <= endDateObject) {
-            //     return event;
-            // }
-        })
-        // console.log("filtering date event: ", currentEventsList.length);
-        // console.log("filtering date event: ", currentEventsList);
-
-        let mapperEvents = mapperListEventDetailFromDatabaseToFE(currentEventsList, iotConfigurations);
-        // mapperRecentEvents(mapperEvents, iotConfigurations, eventTypes, iotDevices, cameraDevices);
-        let currentEventsListMapperUtils = mapperEventsUtils(mapperEvents, iotConfigurations, eventTypes, iotDevices, cameraDevices, areasList, buildingsList, floorsList, iotTypes, mapperEvents.length);
-        setEventsForFlatList(currentEventsListMapperUtils)
-
-        // setEventsList(currentEventsList);
-    }
-    // const mapperRecentEvents = (events, iotConfigs = [], eventTypes, iotMaps, cameraMaps) => {
-    //     let devicesList = iotMaps.concat(cameraMaps);
-    //     let latestEvents = [];
-    //     for (let i = 0; i < events.length; i++) {
-    //         // console.log("events[i]: ", events[i])
-    //         let zone = events[i]['zone'];
-    //         let event_name = '', device_name = '', address = '', id_iot_config = '';
-    //         for (let i = 0; i < iotConfigs.length; i++) {
-    //             if (zone == iotConfigs[i]['zone']) {
-    //                 let connect_event_type = iotConfigs[i]['connect_event_type'];
-    //                 for (let j = 0; j < eventTypes.length; j++) {
-    //                     if (eventTypes[j].id == connect_event_type || eventTypes[j]._id == connect_event_type) {
-    //                         event_name = eventTypes[j].event_name;
-    //                         break;
-    //                     }
-    //                 }
-    //                 device_name = iotConfigs[i].name;
-    //                 id_iot_config = iotConfigs[i].id;
-    //                 break;
-    //             }
-    //         }
-
-    //         for (let i = 0; i < devicesList.length; i++) {
-    //             if (devicesList[i].type == 'iot' && devicesList[i].connect_iot == id_iot_config) {
-    //                 address = devicesList[i].address;
-    //                 break;
-    //             }
-    //         }
-
-    //         let created_at = new Date(events[i].created_at).toISOString();
-    //         latestEvents.push({
-    //             ...events[i],
-    //             event_name,
-    //             device_name,
-    //             address,
-    //             created_at,
-    //             // zone: zone,
-    //             key: events[i].id,
-    //             video_url: events[i].detection_image_url ? events[i].detection_image_url : 'https://www.datasciencecentral.com/wp-content/uploads/2021/10/9712908078.jpeg'
-    //         })
-    //     }
-
-    //     setEventsForFlatList(latestEvents);
-    // }
-    // const mapperIotTypes = (iotTypes, iotDevicesConfig) => {
-    //     let iotTypeInfo = [];
-    //     for (let i = 0; i < iotTypes.length; i++) {
-    //         let iotDevicesOfType = [];
-    //         for (let j = 0; j < iotDevicesConfig.length; j++) {
-    //             if (iotDevicesConfig[j]["connect_iot_type"] == iotTypes[i]["id"]) {
-    //                 iotDevicesOfType.push(iotDevicesConfig[j]);
-    //             }
-    //         }
-    //         iotTypeInfo.push({ "size": iotDevicesOfType.length, "iot_type_name": iotTypes[i].iot_type_name, "image_url": iotTypes[i].image_url });
-    //     }
-
-    //     setTotalIotTypesInfo(iotTypeInfo);
-    // }
-
-
-    useEffect(() => {
-        /* call api to get iotDevicesMap, cameraDevicesMap, dataIOTDevicesConfig, dataEvents, dataEventsType */
-        // console.log("use effect event")
         let areas = [], buildings = [], floors = [], iotMaps = [], cameraMaps = [], events = [], eventTypes = [], newSeries = [], iotConfigs = [], cameraConfigs = [], iotTypes = [], cameraTypes = [];
 
         AreaAPI.getAll().then(res => {
@@ -291,7 +291,8 @@ export default function Event({ navigation }) {
                                                     let mapperCameraConfigs = mapperListCameraConfigurationFromDatabaseToFE(cameraConfigs);
                                                     let mapperIoTTypes = mapperListIOTTypeFromDatabaseToFE(iotTypes);
                                                     // let mapperEvents = mapperListEventDetailFromDatabaseToFE(events)     // need to remove EventAPI get all
-                                                    let mapperEvents = mapperListEventDetailFromDatabaseToFE(eventsList, mapperIoTConfigs)
+                                                    // let mapperEvents = mapperListEventDetailFromDatabaseToFE(eventsList, mapperIoTConfigs)
+                                                    let mapperEvents = mapperListEventDetailFromDatabaseToFE(events, mapperIoTConfigs)
 
                                                     newSeries = [iotMaps.length, cameraMaps.length]
 
@@ -304,56 +305,22 @@ export default function Event({ navigation }) {
                                                     setEventTypes(eventTypes);
                                                     setIotConfigurations(mapperIoTConfigs);
                                                     setIotsType(mapperIoTTypes)
-
-                                                    // setSeries(newSeries);
-                                                    // setMarkers(mapperAreas);
-                                                    // console.log("mapperDevices dashboard: ", mapperIoTMaps, mapperCameraMaps)
-                                                    // mapperRecentEvents(mapperEvents, mapperIoTConfigs, eventTypes, mapperIoTMaps, mapperCameraMaps);
-
                                                     let currentEventsList = mapperEventsUtils(mapperEvents, mapperIoTConfigs, eventTypes, mapperIoTMaps, mapperCameraMaps, mapperAreas, mapperBuildings, mapperFloors, mapperIoTTypes, mapperEvents.length, mapperCameraConfigs, cameraTypes);
                                                     let sortedEvents = sortEventOnCreatedAt(currentEventsList);
+                                                    sortedEvents = sortedEvents.filter((event, index) => {
+
+                                                        // let convertedCreatedAt = helperDateISO(event.created_at);
+                                                        let convertedCreatedAt = helperDateISO(event.event_time);
+                                                        let eventDateObject = Date.parse(convertedCreatedAt);
+                                                        if (startDateObject <= eventDateObject && eventDateObject <= endDateObject) {
+                                                            return event;
+                                                        }
+                                                    })
+
+
                                                     setEventsForFlatList(sortedEvents)
-
-                                                    // mapperIotTypes(mapperIoTTypes, mapperIoTConfigs);
-
-                                                    // handleDataForPieChart(mapperCameraMaps.length, mapperIoTMaps.length);
                                                 })
 
-                                                // let mapperAreas = mapperListAreaFromDatabaseToFE(areas);
-                                                // let mapperBuildings = mapperListBuildingFromDatabaseToFE(buildings);
-                                                // let mapperFloors = mapperListFloorFromDatabaseToFE(floors, mapperBuildings);
-                                                // let devices = cameraMaps.concat(iotMaps);
-                                                // let mapperDevices = mapperListDeviceFromDatabaseToFE(devices, mapperAreas, mapperBuildings, mapperFloors)
-                                                // let mapperIoTMaps = mapperDevices.filter(item => item.type == 'iot')
-                                                // let mapperCameraMaps = mapperDevices.filter(item => item.type == 'camera')
-                                                // let mapperIoTConfigs = mapperIOTConfigListFromDatabaseToFE(iotConfigs);
-                                                // let mapperCameraConfigs = mapperListCameraConfigurationFromDatabaseToFE(cameraConfigs);
-                                                // let mapperIoTTypes = mapperListIOTTypeFromDatabaseToFE(iotTypes);
-                                                // // let mapperEvents = mapperListEventDetailFromDatabaseToFE(events)     // need to remove EventAPI get all
-                                                // let mapperEvents = mapperListEventDetailFromDatabaseToFE(eventsList, mapperIoTConfigs)
-
-                                                // newSeries = [iotMaps.length, cameraMaps.length]
-
-
-                                                // setAreasList(mapperAreas);
-                                                // setBuildingsList(mapperBuildings);
-                                                // setFloorsList(mapperFloors)
-                                                // setIotDevices(mapperIoTMaps);           // map
-                                                // setCameraDevices(mapperCameraMaps);     // map
-                                                // setEventTypes(eventTypes);
-                                                // setIotConfigurations(mapperIoTConfigs);
-                                                // setIotsType(mapperIoTTypes)
-
-                                                // // setSeries(newSeries);
-                                                // // setMarkers(mapperAreas);
-                                                // // console.log("mapperDevices dashboard: ", mapperIoTMaps, mapperCameraMaps)
-                                                // // mapperRecentEvents(mapperEvents, mapperIoTConfigs, eventTypes, mapperIoTMaps, mapperCameraMaps);
-                                                // let currentEventsList = mapperEventsUtils(mapperEvents, mapperIoTConfigs, eventTypes, mapperIoTMaps, mapperCameraMaps, mapperAreas, mapperBuildings, mapperFloors, mapperIoTTypes, mapperEvents.length, mapperCameraConfigs);
-                                                // setEventsForFlatList(currentEventsList)
-
-                                                // // mapperIotTypes(mapperIoTTypes, mapperIoTConfigs);
-
-                                                // // handleDataForPieChart(mapperCameraMaps.length, mapperIoTMaps.length);
                                             })
                                         })
                                     })
@@ -365,13 +332,257 @@ export default function Event({ navigation }) {
             })
         })
 
-        // setOriginalData(dataEvents);
-        // setConfigurationIOTsList(dataIOTDevicesConfig);
-        // let dataDevices = iotDevices.concat(cameraDevices);
-        // setDevicesList(dataDevices);
-        // mapperEvents(dataEvents, false)
-        // mapperEvents(dataEvents, true)
-    }, [eventsListRedux, refreshing]);
+
+
+
+
+        // console.log(convertDate(startDate))
+        // console.log(convertDate(endDate))
+        // let startDateObject = Date.parse(convertDate(startDate));
+        // let endDateObject = Date.parse(convertDate(endDate));
+
+        // // set events list
+        // // let currentEventsList = eventsList;
+        // let currentEventsList = originalEventsListRedux;
+        // // console.log("currentEventsList EVENT: ", currentEventsList)
+        // currentEventsList = currentEventsList.filter((event, index) => {
+
+        //     // let convertedCreatedAt = helperDateISO(event.created_at);
+        //     let convertedCreatedAt = helperDateISO(event.event_time);
+        //     let eventDateObject = Date.parse(convertedCreatedAt);
+        //     if (startDateObject <= eventDateObject && eventDateObject <= endDateObject) {
+        //         return event;
+        //     }
+        // })
+        // // console.log("filtering date event: ", currentEventsList.length);
+        // // console.log("filtering date event: ", currentEventsList);
+
+        // let mapperEvents = mapperListEventDetailFromDatabaseToFE(currentEventsList, iotConfigurations);
+        // // mapperRecentEvents(mapperEvents, iotConfigurations, eventTypes, iotDevices, cameraDevices);
+        // let currentEventsListMapperUtils = mapperEventsUtils(mapperEvents, iotConfigurations, eventTypes, iotDevices, cameraDevices, areasList, buildingsList, floorsList, iotTypes, mapperEvents.length);
+        // setEventsForFlatList(currentEventsListMapperUtils)
+
+        // setEventsList(currentEventsList);
+    }
+
+
+
+    const [connectSocket, setConnectSocket] = useState(false);
+    const [firstFetch, setFirstFetch] = useState(true);
+    const [io, setIo] = useState(null);
+    const [idEvents, setIdEvents] = useState({});
+
+    async function onDisplayNotification(event = {}) {
+        const channelId = await notifee.createChannel({
+            id: 'default',
+            name: 'Default Channel',
+        });
+
+        await notifee.requestPermission();
+
+        // Sometime later...
+        await notifee.displayNotification({
+            id: event._id,
+            title: event.event_name,
+            body: new Date(event.event_time).toLocaleString() + ', ' + event.address,
+            android: {
+                channelId,
+            },
+        });
+        // count += 1;
+    }
+
+    useEffect(() => {
+
+
+        if (firstFetch) {
+            let areas = [], buildings = [], floors = [], iotMaps = [], cameraMaps = [], events = [], eventTypes = [], newSeries = [], iotConfigs = [], cameraConfigs = [], iotTypes = [], cameraTypes = [];
+
+            AreaAPI.getAll().then(res => {
+                areas = res.data.areas;
+
+                BuildingAPI.getAll().then(res => {
+                    buildings = res.data.areas;
+
+                    FloorAPI.getAll().then(res => {
+                        floors = res.data.areas;
+
+                        IoTMapAPI.getAll().then(res => {
+                            iotMaps = res.data.iot_device_maps;
+
+                            CameraMapAPI.getAll().then(res => {
+                                cameraMaps = res.data.camera_maps;
+
+                                IoTConfigAPI.getAll().then(res => {
+                                    iotConfigs = res.data.iot_devices;
+
+                                    CameraConfigAPI.getAll().then(res => {
+                                        cameraConfigs = res.data.cameras
+
+                                        EventAPI.getAll().then(res => {
+                                            events = res.data.events;
+
+                                            EventTypeAPI.getAll().then(res => {
+                                                eventTypes = res.data.event_types;
+
+                                                IoTTypeAPI.getAll().then(res => {
+                                                    iotTypes = res.data.iot_device_types;
+
+                                                    CameraTypeAPI.getAll().then(res => {
+                                                        cameraTypes = res.data.camera_types;
+
+                                                        let mapperAreas = mapperListAreaFromDatabaseToFE(areas);
+                                                        let mapperBuildings = mapperListBuildingFromDatabaseToFE(buildings);
+                                                        let mapperFloors = mapperListFloorFromDatabaseToFE(floors, mapperBuildings);
+                                                        let devices = cameraMaps.concat(iotMaps);
+                                                        let mapperDevices = mapperListDeviceFromDatabaseToFE(devices, mapperAreas, mapperBuildings, mapperFloors)
+                                                        let mapperIoTMaps = mapperDevices.filter(item => item.type == 'iot')
+                                                        let mapperCameraMaps = mapperDevices.filter(item => item.type == 'camera')
+                                                        let mapperIoTConfigs = mapperIOTConfigListFromDatabaseToFE(iotConfigs);
+                                                        let mapperCameraConfigs = mapperListCameraConfigurationFromDatabaseToFE(cameraConfigs);
+                                                        let mapperIoTTypes = mapperListIOTTypeFromDatabaseToFE(iotTypes);
+                                                        // let mapperEvents = mapperListEventDetailFromDatabaseToFE(events)     // need to remove EventAPI get all
+                                                        // let mapperEvents = mapperListEventDetailFromDatabaseToFE(eventsList, mapperIoTConfigs)
+                                                        let mapperEvents = mapperListEventDetailFromDatabaseToFE(events, mapperIoTConfigs)
+
+                                                        newSeries = [iotMaps.length, cameraMaps.length]
+
+
+                                                        setAreasList(mapperAreas);
+                                                        setBuildingsList(mapperBuildings);
+                                                        setFloorsList(mapperFloors)
+                                                        setIotDevices(mapperIoTMaps);           // map
+                                                        setCameraDevices(mapperCameraMaps);     // map
+                                                        setEventTypes(eventTypes);
+                                                        setIotConfigurations(mapperIoTConfigs);
+                                                        setIotsType(mapperIoTTypes)
+                                                        let currentEventsList = mapperEventsUtils(mapperEvents, mapperIoTConfigs, eventTypes, mapperIoTMaps, mapperCameraMaps, mapperAreas, mapperBuildings, mapperFloors, mapperIoTTypes, mapperEvents.length, mapperCameraConfigs, cameraTypes);
+                                                        let sortedEvents = sortEventOnCreatedAt(currentEventsList);
+                                                        setEventsForFlatList(sortedEvents)
+                                                        setFirstFetch(false);
+                                                    })
+
+                                                })
+                                            })
+                                        })
+                                    })
+                                })
+                            })
+                        })
+                    })
+                })
+            })
+        }
+
+
+        if (!connectSocket) {
+            setIo(socket.connect(SOCKET_URL));
+            setConnectSocket(true);
+        }
+
+
+        io && io.on("event_new", (message = "") => {
+            message = JSON.parse(message);
+            let obj;
+            if (idEvents[message._id] == undefined || idEvents[message.id] == undefined) {
+                obj = idEvents;
+                obj[message.id] = 1;
+                obj[message._id] = 1;
+                // onDisplayNotification(message)
+                onRefresh(true);
+            }
+        })
+
+
+        io && io.on("event_verified", (message = "") => {
+            message = JSON.parse(message);
+            let obj;
+            if (idEvents[message._id] == undefined || idEvents[message.id] == undefined) {
+                obj = idEvents;
+                obj[message.id] = 1;
+                obj[message._id] = 1;
+                onRefresh(true);
+            } else {
+                onRefresh(true);
+            }
+        })
+
+
+
+        // let areas = [], buildings = [], floors = [], iotMaps = [], cameraMaps = [], events = [], eventTypes = [], newSeries = [], iotConfigs = [], cameraConfigs = [], iotTypes = [], cameraTypes = [];
+        // AreaAPI.getAll().then(res => {
+        //     areas = res.data.areas;
+
+        //     BuildingAPI.getAll().then(res => {
+        //         buildings = res.data.areas;
+
+        //         FloorAPI.getAll().then(res => {
+        //             floors = res.data.areas;
+
+        //             IoTMapAPI.getAll().then(res => {
+        //                 iotMaps = res.data.iot_device_maps;
+
+        //                 CameraMapAPI.getAll().then(res => {
+        //                     cameraMaps = res.data.camera_maps;
+
+        //                     IoTConfigAPI.getAll().then(res => {
+        //                         iotConfigs = res.data.iot_devices;
+
+        //                         CameraConfigAPI.getAll().then(res => {
+        //                             cameraConfigs = res.data.cameras
+
+        //                             EventAPI.getAll().then(res => {
+        //                                 events = res.data.events;
+
+        //                                 EventTypeAPI.getAll().then(res => {
+        //                                     eventTypes = res.data.event_types;
+
+        //                                     IoTTypeAPI.getAll().then(res => {
+        //                                         iotTypes = res.data.iot_device_types;
+
+        //                                         CameraTypeAPI.getAll().then(res => {
+        //                                             cameraTypes = res.data.camera_types;
+
+        //                                             let mapperAreas = mapperListAreaFromDatabaseToFE(areas);
+        //                                             let mapperBuildings = mapperListBuildingFromDatabaseToFE(buildings);
+        //                                             let mapperFloors = mapperListFloorFromDatabaseToFE(floors, mapperBuildings);
+        //                                             let devices = cameraMaps.concat(iotMaps);
+        //                                             let mapperDevices = mapperListDeviceFromDatabaseToFE(devices, mapperAreas, mapperBuildings, mapperFloors)
+        //                                             let mapperIoTMaps = mapperDevices.filter(item => item.type == 'iot')
+        //                                             let mapperCameraMaps = mapperDevices.filter(item => item.type == 'camera')
+        //                                             let mapperIoTConfigs = mapperIOTConfigListFromDatabaseToFE(iotConfigs);
+        //                                             let mapperCameraConfigs = mapperListCameraConfigurationFromDatabaseToFE(cameraConfigs);
+        //                                             let mapperIoTTypes = mapperListIOTTypeFromDatabaseToFE(iotTypes);
+        //                                             // let mapperEvents = mapperListEventDetailFromDatabaseToFE(events)     // need to remove EventAPI get all
+        //                                             let mapperEvents = mapperListEventDetailFromDatabaseToFE(eventsList, mapperIoTConfigs)
+
+        //                                             newSeries = [iotMaps.length, cameraMaps.length]
+
+
+        //                                             setAreasList(mapperAreas);
+        //                                             setBuildingsList(mapperBuildings);
+        //                                             setFloorsList(mapperFloors)
+        //                                             setIotDevices(mapperIoTMaps);           // map
+        //                                             setCameraDevices(mapperCameraMaps);     // map
+        //                                             setEventTypes(eventTypes);
+        //                                             setIotConfigurations(mapperIoTConfigs);
+        //                                             setIotsType(mapperIoTTypes)
+        //                                             let currentEventsList = mapperEventsUtils(mapperEvents, mapperIoTConfigs, eventTypes, mapperIoTMaps, mapperCameraMaps, mapperAreas, mapperBuildings, mapperFloors, mapperIoTTypes, mapperEvents.length, mapperCameraConfigs, cameraTypes);
+        //                                             let sortedEvents = sortEventOnCreatedAt(currentEventsList);
+        //                                             setEventsForFlatList(sortedEvents)
+        //                                         })
+
+        //                                     })
+        //                                 })
+        //                             })
+        //                         })
+        //                     })
+        //                 })
+        //             })
+        //         })
+        //     })
+        // })
+    }, [eventsListRedux, refreshing, eventsForFlatList, firstFetch]);
 
 
     return (

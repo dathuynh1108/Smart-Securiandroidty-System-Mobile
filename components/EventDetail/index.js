@@ -7,7 +7,7 @@ import VideoView from "../VideoView";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCommentEvent, updateConfirmStatusEvent } from '../../reducers/eventReducer';
 import VideoEvent from "../VideoEvent";
-import { IP_ADDRESS } from "../../apis/configs/axiosConfig";
+import { IP_ADDRESS, ip_global } from "../../apis/configs/axiosConfig";
 
 export default function EventDetail({ navigation, route }) {
     // console.log("route params: ", route.params)
@@ -129,7 +129,7 @@ export default function EventDetail({ navigation, route }) {
                         // source={{ uri: 'https://media.istockphoto.com/id/621984692/photo/traffic-security-camera.jpg?s=612x612&w=0&k=20&c=w1TrTBvor2fNfBPxfFpuTm5fShzkuHgRoVVUJcTK1sA=', }}
                         // source={{ uri: 'https://scontent.xx.fbcdn.net/v/t1.15752-9/344289776_256146703543999_2352939010781704110_n.png?stp=dst-png_p206x206&_nc_cat=101&ccb=1-7&_nc_sid=aee45a&_nc_ohc=vWV8s4JXthgAX_jEiar&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdQtM-bKXdsXOF4mD4Szm2dShE9eJFK2gPrSFiJDUHuoRA&oe=647F0F6F', }}
                         // source={{ uri: 'http://192.168.10.103:5005/static/general/image/20230519-154622-d81c69f21949456e8fe76744e9669965.jpg', }}
-                        source={{ uri: eventDetailInfo.normal_image_url, }}
+                        source={{ uri: eventDetailInfo.normal_image_url ? eventDetailInfo.normal_image_url.replace('localhost', ip_global).replace('undefined', ip_global) : '', }}
                     />
 
                     {/* <Image
@@ -153,7 +153,7 @@ export default function EventDetail({ navigation, route }) {
                         // source={{ uri: 'https://media.istockphoto.com/id/621984692/photo/traffic-security-camera.jpg?s=612x612&w=0&k=20&c=w1TrTBvor2fNfBPxfFpuTm5fShzkuHgRoVVUJcTK1sA=', }}
                         // source={{ uri: 'https://scontent.xx.fbcdn.net/v/t1.15752-9/344289776_256146703543999_2352939010781704110_n.png?stp=dst-png_p206x206&_nc_cat=101&ccb=1-7&_nc_sid=aee45a&_nc_ohc=vWV8s4JXthgAX_jEiar&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdQtM-bKXdsXOF4mD4Szm2dShE9eJFK2gPrSFiJDUHuoRA&oe=647F0F6F', }}
                         // source={{ uri: 'http://192.168.10.103:5005/static/general/image/20230519-154622-d81c69f21949456e8fe76744e9669965.jpg', }}
-                        source={{ uri: eventDetailInfo.detection_image_url?.replace('localhost', IP_ADDRESS), }}
+                        source={{ uri: eventDetailInfo.detection_image_url?.replace('localhost', ip_global).replace('undefined', ip_global), }}
                     />
 
                     {/* <Image
@@ -189,7 +189,7 @@ export default function EventDetail({ navigation, route }) {
 
                 {
                     eventDetailInfo?.normal_video_url ?
-                        <VideoEvent video_url={eventDetailInfo.normal_video_url?.replace('localhost', IP_ADDRESS)} />
+                        <VideoEvent video_url={eventDetailInfo.normal_video_url?.replace('localhost', ip_global).replace('undefined', ip_global)} />
                         :
                         ''
                 }
@@ -210,7 +210,7 @@ export default function EventDetail({ navigation, route }) {
 
                 {
                     eventDetailInfo?.detection_video_url ?
-                        <VideoEvent video_url={eventDetailInfo.detection_video_url?.replace('localhost', IP_ADDRESS)} />
+                        <VideoEvent video_url={eventDetailInfo.detection_video_url?.replace('localhost', ip_global).replace('undefined', ip_global)} />
                         :
                         ''
                 }

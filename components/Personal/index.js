@@ -28,14 +28,14 @@ export default function Personal({ navigation }) {
         <View style={styles.personalContainer}>
             {/* <Text>Personal</Text> */}
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
                 style={styles.buttonConfig}
                 onPress={() => navigation.navigate('Configuration')}
             >
                 <View style={styles.logoutView}>
                     <Text style={styles.logoutText}>Cấu hình</Text>
                 </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <TouchableOpacity
                 style={styles.buttonLogout}

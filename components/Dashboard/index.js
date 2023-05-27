@@ -369,7 +369,7 @@ export default function Dashboard({ route, navigation }) {
 
                 {recentEvents && recentEvents.map((event, index) => {
                     let url = event.video_url;
-                    console.log("event: ", event)
+                    // console.log("event: ", event)
                     return <View key={index}>
                         <View style={styles.recentEventBlock}>
                             <View>
