@@ -463,24 +463,11 @@ export default function Report({ navigation }) {
                 </View>
             </View>
 
-            <View
+            {/* <View
                 style={{
                     marginTop: 40,
                 }}
             >
-                {/* <PieChart
-                    data={dataPieChart}
-                    width={screenWidth}
-                    height={290}
-                    chartConfig={styles.chartConfig}
-                    accessor={"population"}
-                    backgroundColor={"transparent"}
-                    paddingLeft={"15"}
-                    paddingRight={"15"}
-                    center={[10, 10]}
-                    absolute
-                /> */}
-
                 <TouchableOpacity
                     style={{
                         backgroundColor: 'white',
@@ -575,13 +562,6 @@ export default function Report({ navigation }) {
                                 :
                                 ''
                         }
-
-
-                        {/* <MenuItem onPress={() => handleSelectMenu('camera')}>Camera</MenuItem>
-                        <MenuItem onPress={() => handleSelectMenu('camera_type')}>Loại camera</MenuItem>
-                        <MenuItem onPress={() => handleSelectMenu('iot')}>Cảm biến</MenuItem>
-                        <MenuItem onPress={() => handleSelectMenu('iot_type')}>Loại cảm biến</MenuItem>
-                        <MenuItem onPress={() => handleSelectMenu('event')}>Sự kiện</MenuItem> */}
                     </Menu>
 
                 </TouchableOpacity>
@@ -644,11 +624,6 @@ export default function Report({ navigation }) {
                                 :
                                 ''
                         }
-
-                        {/* <MenuItem onPress={() => handleSelectMenuIntervalColumn('date', 'Ngày')}>Ngày</MenuItem>
-                        <MenuItem onPress={() => handleSelectMenuIntervalColumn('week', 'Tuần')}>Tuần</MenuItem>
-                        <MenuItem onPress={() => handleSelectMenuIntervalColumn('month', 'Tháng')}>Tháng</MenuItem>
-                        <MenuItem onPress={() => handleSelectMenuIntervalColumn('year', 'Năm')}>Năm</MenuItem> */}
                     </Menu>
                 </TouchableOpacity>
 
@@ -671,7 +646,7 @@ export default function Report({ navigation }) {
                 }}>
                     Thống kê số lần báo động của loại cảm biến
                 </Text>
-            </View>
+            </View> */}
 
         </ScrollView >
     );

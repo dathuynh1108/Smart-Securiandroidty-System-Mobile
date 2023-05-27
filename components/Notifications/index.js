@@ -1,20 +1,11 @@
-// import { Dimensions, FlatList, Text, View } from "react-native";
 import '../../styles/appStyles';
 import dataNotifications from "../../utils/dummyData/notifications.json";
-// import { useEffect, useState } from "react";
-// import { styles } from "./styles";
-
 import { Button, Text, View, FlatList, TouchableOpacity, ScrollView, Platform, TouchableHighlight } from "react-native";
-// import dataEvents from '../../utils/dummyData/eventList.json';
-// import dataIOTDevicesConfig from '../../utils/dummyData/managementIOTDeviceConfig.json';
-// import cameraDevices from '../../utils/dummyData/managementCameraDevice.json';
-// import iotDevices from '../../utils/dummyData/managementIOTDevice.json';
-// import dataEventsType from '../../utils/dummyData/configurationEventType.json';
 import { useEffect, useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { styles } from "./styles";
 import { TextInput } from "react-native-paper";
-import { convertDate } from "../../utils/helper/helper";
+import { convertDate, sortEventOnCreatedAt } from "../../utils/helper/helper";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { getEventsList } from "../../reducers/eventReducer";
 import { BuildingAPI } from "../../apis/BuildingAPI";
@@ -32,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { mapperEventsUtils } from "../../utils/mapper/mapperEvents";
 import { useCallback } from "react";
 import { CameraTypeAPI } from '../../apis/CameraTypeAPI';
+import notifee from '@notifee/react-native';
 
 
 export default function Notifications({ navigation }) {
@@ -49,7 +41,7 @@ export default function Notifications({ navigation }) {
             <Text style={styles.notificationName}>{item.event_name}</Text>
 
             <Text>
-                Thời gian: {item.event_time}
+                Thời gian: {new Date(item.event_time).toLocaleString()}
             </Text>
 
             <Text>
@@ -59,10 +51,13 @@ export default function Notifications({ navigation }) {
     }
 
 
+
     useEffect(() => {
         // setNotificationsList(dataNotifications);
 
+
         let areas = [], buildings = [], floors = [], iotMaps = [], cameraMaps = [], events = [], eventTypes = [], newSeries = [], iotConfigs = [], cameraConfigs = [], iotTypes = [], cameraTypes = [];
+
         AreaAPI.getAll().then(res => {
             areas = res.data.areas;
 
@@ -96,7 +91,6 @@ export default function Notifications({ navigation }) {
                                                 CameraTypeAPI.getAll().then(res => {
                                                     cameraTypes = res.data.camera_types;
 
-
                                                     let mapperAreas = mapperListAreaFromDatabaseToFE(areas);
                                                     let mapperBuildings = mapperListBuildingFromDatabaseToFE(buildings);
                                                     let mapperFloors = mapperListFloorFromDatabaseToFE(floors, mapperBuildings);
@@ -107,76 +101,15 @@ export default function Notifications({ navigation }) {
                                                     let mapperIoTConfigs = mapperIOTConfigListFromDatabaseToFE(iotConfigs);
                                                     let mapperCameraConfigs = mapperListCameraConfigurationFromDatabaseToFE(cameraConfigs);
                                                     let mapperIoTTypes = mapperListIOTTypeFromDatabaseToFE(iotTypes);
-                                                    // let mapperEvents = mapperListEventDetailFromDatabaseToFE(events)     // need to remove EventAPI get all
                                                     let mapperEvents = mapperListEventDetailFromDatabaseToFE(events, mapperIoTConfigs)
 
                                                     newSeries = [iotMaps.length, cameraMaps.length]
-
-
-                                                    // setAreasList(mapperAreas);
-                                                    // setBuildingsList(mapperBuildings);
-                                                    // setFloorsList(mapperFloors)
-                                                    // setIotDevices(mapperIoTMaps);           // map
-                                                    // setCameraDevices(mapperCameraMaps);     // map
-                                                    // setEventTypes(eventTypes);
-                                                    // setIotConfigurations(mapperIoTConfigs);
-                                                    // setIotsType(mapperIoTTypes)
-
-                                                    // setSeries(newSeries);
-                                                    // setMarkers(mapperAreas);
-                                                    // console.log("mapperDevices dashboard: ", mapperIoTMaps, mapperCameraMaps)
-                                                    // mapperRecentEvents(mapperEvents, mapperIoTConfigs, eventTypes, mapperIoTMaps, mapperCameraMaps);
-                                                    // setEventsForFlatList(currentEventsList)
-
                                                     let currentEventsList = mapperEventsUtils(mapperEvents, mapperIoTConfigs, eventTypes, mapperIoTMaps, mapperCameraMaps, mapperAreas, mapperBuildings, mapperFloors, mapperIoTTypes, mapperEvents.length, mapperCameraConfigs, cameraTypes);
-                                                    setNotificationsList(currentEventsList)
-                                                    // setNotificationsList([])
-                                                    // console.log("currentEventsList: ", currentEventsList)
-
-                                                    // mapperIotTypes(mapperIoTTypes, mapperIoTConfigs);
-
-                                                    // handleDataForPieChart(mapperCameraMaps.length, mapperIoTMaps.length);
+                                                    let sortedEvents = sortEventOnCreatedAt(currentEventsList);
+                                                    setNotificationsList(sortedEvents);
+                                                    // setFirstFetch(false);
                                                 })
 
-                                                // let mapperAreas = mapperListAreaFromDatabaseToFE(areas);
-                                                // let mapperBuildings = mapperListBuildingFromDatabaseToFE(buildings);
-                                                // let mapperFloors = mapperListFloorFromDatabaseToFE(floors, mapperBuildings);
-                                                // let devices = cameraMaps.concat(iotMaps);
-                                                // let mapperDevices = mapperListDeviceFromDatabaseToFE(devices, mapperAreas, mapperBuildings, mapperFloors)
-                                                // let mapperIoTMaps = mapperDevices.filter(item => item.type == 'iot')
-                                                // let mapperCameraMaps = mapperDevices.filter(item => item.type == 'camera')
-                                                // let mapperIoTConfigs = mapperIOTConfigListFromDatabaseToFE(iotConfigs);
-                                                // let mapperCameraConfigs = mapperListCameraConfigurationFromDatabaseToFE(cameraConfigs);
-                                                // let mapperIoTTypes = mapperListIOTTypeFromDatabaseToFE(iotTypes);
-                                                // // let mapperEvents = mapperListEventDetailFromDatabaseToFE(events)     // need to remove EventAPI get all
-                                                // let mapperEvents = mapperListEventDetailFromDatabaseToFE(events, mapperIoTConfigs)
-
-                                                // newSeries = [iotMaps.length, cameraMaps.length]
-
-
-                                                // // setAreasList(mapperAreas);
-                                                // // setBuildingsList(mapperBuildings);
-                                                // // setFloorsList(mapperFloors)
-                                                // // setIotDevices(mapperIoTMaps);           // map
-                                                // // setCameraDevices(mapperCameraMaps);     // map
-                                                // // setEventTypes(eventTypes);
-                                                // // setIotConfigurations(mapperIoTConfigs);
-                                                // // setIotsType(mapperIoTTypes)
-
-                                                // // setSeries(newSeries);
-                                                // // setMarkers(mapperAreas);
-                                                // // console.log("mapperDevices dashboard: ", mapperIoTMaps, mapperCameraMaps)
-                                                // // mapperRecentEvents(mapperEvents, mapperIoTConfigs, eventTypes, mapperIoTMaps, mapperCameraMaps);
-                                                // // setEventsForFlatList(currentEventsList)
-
-                                                // let currentEventsList = mapperEventsUtils(mapperEvents, mapperIoTConfigs, eventTypes, mapperIoTMaps, mapperCameraMaps, mapperAreas, mapperBuildings, mapperFloors, mapperIoTTypes, mapperEvents.length, mapperCameraConfigs, cameraTypes);
-                                                // setNotificationsList(currentEventsList)
-                                                // // setNotificationsList([])
-                                                // // console.log("currentEventsList: ", currentEventsList)
-
-                                                // // mapperIotTypes(mapperIoTTypes, mapperIoTConfigs);
-
-                                                // // handleDataForPieChart(mapperCameraMaps.length, mapperIoTMaps.length);
                                             })
                                         })
                                     })
@@ -187,12 +120,43 @@ export default function Notifications({ navigation }) {
                 })
             })
         })
+
+
+
+
     }, [refreshing])
+
+
+    // let count = 1;
+    // async function onDisplayNotification() {
+    //     const channelId = await notifee.createChannel({
+    //         id: 'default',
+    //         name: 'Default Channel',
+    //     });
+
+    //     await notifee.requestPermission();
+
+    //     // Sometime later...
+    //     await notifee.displayNotification({
+    //         id: toString(count),
+    //         title: `update ${count}`,
+    //         body: `body update ${count}`,
+    //         android: {
+    //             channelId,
+    //         },
+    //     });
+    //     count += 1;
+    // }
 
 
     return (
         <View style={styles.notificationContainer}>
-            <FlatList
+
+            <View>
+                {/* <Button title="Display Notification" onPress={() => { onDisplayNotification() }} /> */}
+            </View>
+
+            {/* <FlatList
                 style={styles.notificationFlatList}
                 data={notificationsList}
                 renderItem={({ item, index }) => {
@@ -202,7 +166,7 @@ export default function Notifications({ navigation }) {
                 onRefresh={() => onRefresh()}
                 refreshing={refreshing}
             >
-            </FlatList>
+            </FlatList> */}
         </View>
 
     );

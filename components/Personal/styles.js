@@ -17,6 +17,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         display: 'flex',
+        marginTop: 10,
         // backgroundColor: 'red'
     },
 

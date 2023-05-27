@@ -90,7 +90,7 @@ export default function Login({ navigation }) {
                         navigation.navigate('LoginForgetPassword')
                     }}
                 >
-                    <Text style={styles.forgetPasswordText}>Quên mật khẩu?</Text>
+                    {/* <Text style={styles.forgetPasswordText}>Quên mật khẩu?</Text> */}
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.loginButton}
