@@ -11,9 +11,9 @@ import dataFloors from '../../utils/dummyData/managementFloor.json';
 import treeselectData from '../../utils/dummyData/treeData.json';
 import { generateDropdownTreeSelectMap } from "../../utils/helper/helper";
 import TreeSelect from 'react-native-tree-select';
-import mapImage from '../../assets/imageTest/floor2_B.png'
-import mapImage1 from '../../assets/imageTest/buildingA.png'
-import mapImage2 from '../../assets/imageTest/floor4_A.png'
+import mapImage from '../../assets/floor2_B.png'
+import mapImage1 from '../../assets/buildingA.png'
+import mapImage2 from '../../assets/floor4_A.png'
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
