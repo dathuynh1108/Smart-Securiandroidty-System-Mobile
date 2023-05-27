@@ -27,7 +27,7 @@ import { mapperEventsUtils } from "../../utils/mapper/mapperEvents";
 import { useCallback } from "react";
 import { CameraTypeAPI } from "../../apis/CameraTypeAPI";
 import * as socket from "socket.io-client";
-import { BASE_URL, SOCKET_URL } from "../../constants/server";
+import { BASE_URL, SOCKET_PATH, SOCKET_URL } from "../../constants/server";
 import notifee from '@notifee/react-native';
 
 
@@ -476,7 +476,7 @@ export default function Event({ navigation }) {
 
 
         if (!connectSocket) {
-            setIo(socket.connect(SOCKET_URL));
+            setIo(socket.connect(SOCKET_URL, {path:  SOCKET_PATH + "/socket.io"}));
             setConnectSocket(true);
         }
 
