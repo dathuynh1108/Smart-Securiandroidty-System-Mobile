@@ -4,9 +4,9 @@ import { Client } from "../../pkg/ion";
 import { IonSFUJSONRPCSignal } from "../../pkg/ion/signal/json-rpc-impl";
 import uuid from "react-native-uuid";
 import { styles } from './styles'
-import { sfuAddress } from "../../apis/configs/axiosConfig";
+import { config } from "../../apis/configs/config";
 import { RTCView } from "react-native-webrtc";
-const config = {
+const pcConfig = {
     sdpSemantics: 'unified-plan',
     iceServers: [
         {
@@ -45,8 +45,8 @@ const VideoView: React.FC<Props> = (props) => {
         if (roomName.current && !connecting.current) {
             console.log("Connecting to SFU room:", roomName.current);
             connecting.current = true;
-            signal.current = new IonSFUJSONRPCSignal(sfuAddress);
-            client.current = new Client(signal.current, config);
+            signal.current = new IonSFUJSONRPCSignal(config.SFU_ADDRESS);
+            client.current = new Client(signal.current, pcConfig);
             signal.current.onopen = () => client.current.join(roomName.current, uuid.v4());
             client.current.ontrack = (track, stream) => {
                 console.log("got track:", track.id, "kind:", track.kind, "for stream:", stream.id);

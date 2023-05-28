@@ -1,13 +1,8 @@
 import axios from "axios"
-// import { BASE_URL } from "../../constants/server"
-
-export const sfuAddress = `wss://smartss.click/controller/ws`
+import {config} from "./config"
 export const api = axios.create({
-    // baseURL: "https://pokeapi.co/api/v2",
-    baseURL: `https://smartss.click/api-gateway`,
+    baseURL: config.BASE_URL + config.BASE_URL_PATH,
 })
-const BASE_URL = `https://smartss.click/ai-gateway`
-export const ip_global = `${BASE_URL}`
 
 // defining a custom error handler for all APIs
 const errorHandler = (error) => {
