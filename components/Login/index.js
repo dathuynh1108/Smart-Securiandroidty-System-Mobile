@@ -6,6 +6,7 @@ import { useState } from "react";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { CommonActions } from '@react-navigation/native';
 import { styles } from "./styles";
+import { LoginAPI } from "../../apis/LoginAPI";
 
 const { screenWidth } = Dimensions.get("window").width;
 const { screenHeight } = Dimensions.get("window").height;
@@ -16,6 +17,7 @@ export default function Login({ navigation }) {
     const [password, setPassword] = useState('');
     const [secureTextEntry, setSecureTextEntry] = useState(true);
     const [rightIcon, setRightIcon] = useState('eye-off');
+    const [trueAuthen, setTrueAuthen] = useState(true);
     const handleIconPassword = () => {
         if (rightIcon == 'eye-off') {
             setSecureTextEntry(false);
@@ -25,27 +27,70 @@ export default function Login({ navigation }) {
             setRightIcon('eye-off')
         }
     }
-    const handleLogin = () => {
-        navigation.dispatch(state => {
-            return CommonActions.reset({
-                index: 0,
-                routes: [{
-                    name: 'Welcome',
-                    // state: {
-                    //     routes: [{
-                    //         name: 'MainTabScreen',
-                    //         state: {
-                    //             routes: [{
-                    //                 name: 'Dashboard',
-                    //                 params: {}
-                    //             }]
-                    //         }
-                    //     }]
-                    // }
+    const handleLogin = async () => {
+        // check account
+        let usernameParam = email;
+        let passwordParam = password;
+        return await LoginAPI.login({ "username": usernameParam, "password": passwordParam }).then(res => {
+            if (!res) {
+                console.log("cac")
+                setTrueAuthen(false)
+                return null;
+            } else {
+                if (res.data.user_detail.token && res.data.user_detail.role == 'supervisor') {
+                    console.log("have token API: ", res.data.user_detail)
+                    navigation.dispatch(state => {
+                        return CommonActions.reset({
+                            index: 0,
+                            routes: [{
+                                name: 'Welcome',
+                                // state: {
+                                //     routes: [{
+                                //         name: 'MainTabScreen',
+                                //         state: {
+                                //             routes: [{
+                                //                 name: 'Dashboard',
+                                //                 params: {}
+                                //             }]
+                                //         }
+                                //     }]
+                                // }
 
-                }]
-            })
+                            }]
+                        })
+                    })
+                    // sessionStorage.setItem('jwt', res.data.user_detail.token);
+                    // const origin = location.state?.from?.pathname || '/dashboard';
+                    // console.log("origin: ", origin)
+                    // // window.location.replace(`http://localhost:${process.env.REACT_APP_PORT}/dashboard`)
+                    // window.location.replace(`/dashboard`)
+                } else {
+                    setTrueAuthen(false)
+                    return null;
+                }
+            }
         })
+
+        // navigation.dispatch(state => {
+        //     return CommonActions.reset({
+        //         index: 0,
+        //         routes: [{
+        //             name: 'Welcome',
+        //             // state: {
+        //             //     routes: [{
+        //             //         name: 'MainTabScreen',
+        //             //         state: {
+        //             //             routes: [{
+        //             //                 name: 'Dashboard',
+        //             //                 params: {}
+        //             //             }]
+        //             //         }
+        //             //     }]
+        //             // }
+
+        //         }]
+        //     })
+        // })
         // navigation.navigate('Welcome')
     }
 
@@ -58,12 +103,31 @@ export default function Login({ navigation }) {
                     <Text style={styles.titleText}>Welcome back.</Text>
                 </View>
 
+                {
+                    trueAuthen ?
+                        ''
+                        :
+                        <View style={{
+                            width: '80%',
+                            height: 20,
+                            marginBottom: 10
+                        }}>
+                            <Text style={{
+                                color: 'red',
+                                fontWeight: 'bold'
+                            }}>
+                                * Tài khoản hoặc mật khẩu không hợp lệ.
+                            </Text>
+                        </View>
+
+                }
+
                 <View style={styles.usernameContainer}>
                     <TextInput
                         style={styles.userNameInput}
                         placeholder="Tên tài khoản"
                         placeholderTextColor="#003f5c"
-                        onChangeText={(email) => setPassword(email)}
+                        onChangeText={(email) => setEmail(email)}
                     />
 
 
