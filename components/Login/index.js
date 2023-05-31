@@ -29,69 +29,51 @@ export default function Login({ navigation }) {
     }
     const handleLogin = async () => {
         // check account
-        let usernameParam = email;
-        let passwordParam = password;
-        return await LoginAPI.login({ "username": usernameParam, "password": passwordParam }).then(res => {
-            if (!res) {
-                console.log("cac")
-                setTrueAuthen(false)
-                return null;
-            } else {
-                if (res.data.user_detail.token && res.data.user_detail.role == 'supervisor') {
-                    console.log("have token API: ", res.data.user_detail)
-                    navigation.dispatch(state => {
-                        return CommonActions.reset({
-                            index: 0,
-                            routes: [{
-                                name: 'Welcome',
-                                // state: {
-                                //     routes: [{
-                                //         name: 'MainTabScreen',
-                                //         state: {
-                                //             routes: [{
-                                //                 name: 'Dashboard',
-                                //                 params: {}
-                                //             }]
-                                //         }
-                                //     }]
-                                // }
-
-                            }]
-                        })
-                    })
-                    // sessionStorage.setItem('jwt', res.data.user_detail.token);
-                    // const origin = location.state?.from?.pathname || '/dashboard';
-                    // console.log("origin: ", origin)
-                    // // window.location.replace(`http://localhost:${process.env.REACT_APP_PORT}/dashboard`)
-                    // window.location.replace(`/dashboard`)
-                } else {
-                    setTrueAuthen(false)
-                    return null;
-                }
-            }
-        })
-
-        // navigation.dispatch(state => {
-        //     return CommonActions.reset({
-        //         index: 0,
-        //         routes: [{
-        //             name: 'Welcome',
-        //             // state: {
-        //             //     routes: [{
-        //             //         name: 'MainTabScreen',
-        //             //         state: {
-        //             //             routes: [{
-        //             //                 name: 'Dashboard',
-        //             //                 params: {}
-        //             //             }]
-        //             //         }
-        //             //     }]
-        //             // }
-
-        //         }]
-        //     })
+        // let usernameParam = email;
+        // let passwordParam = password;
+        // return await LoginAPI.login({ "username": usernameParam, "password": passwordParam }).then(res => {
+        //     if (!res) {
+        //         console.log("cac")
+        //         setTrueAuthen(false)
+        //         return null;
+        //     } else {
+        //         if (res.data.user_detail.token && res.data.user_detail.role == 'supervisor') {
+        //             console.log("have token API: ", res.data.user_detail)
+        //             navigation.dispatch(state => {
+        //                 return CommonActions.reset({
+        //                     index: 0,
+        //                     routes: [{
+        //                         name: 'Welcome',
+        //                     }]
+        //                 })
+        //             })
+        //         } else {
+        //             setTrueAuthen(false)
+        //             return null;
+        //         }
+        //     }
         // })
-        // navigation.navigate('Welcome')
+
+        navigation.dispatch(state => {
+            return CommonActions.reset({
+                index: 0,
+                routes: [{
+                    name: 'Welcome',
+                    // state: {
+                    //     routes: [{
+                    //         name: 'MainTabScreen',
+                    //         state: {
+                    //             routes: [{
+                    //                 name: 'Dashboard',
+                    //                 params: {}
+                    //             }]
+                    //         }
+                    //     }]
+                    // }
+
+                }]
+            })
+        })
     }
 
     return (
@@ -149,13 +131,13 @@ export default function Login({ navigation }) {
                     />
                 </View>
 
-                <TouchableOpacity style={styles.forgetPasswordContainer}
+                {/* <TouchableOpacity style={styles.forgetPasswordContainer}
                     onPress={() => {
                         navigation.navigate('LoginForgetPassword')
                     }}
                 >
-                    {/* <Text style={styles.forgetPasswordText}>Quên mật khẩu?</Text> */}
-                </TouchableOpacity>
+                    <Text style={styles.forgetPasswordText}>Quên mật khẩu?</Text>
+                </TouchableOpacity> */}
 
                 <TouchableOpacity style={styles.loginButton}
                     onPress={handleLogin}

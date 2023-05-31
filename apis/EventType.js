@@ -1,6 +1,4 @@
 import { api } from "./configs/axiosConfig";
-import { BASE_URL } from "../constants/server";
-
 
 export const EventTypeAPI = {
     getAll: async function (cancel = false) {

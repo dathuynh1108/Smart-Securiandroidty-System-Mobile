@@ -1,9 +1,4 @@
 import { Button, Text, View, FlatList, TouchableOpacity, ScrollView, Platform, TouchableHighlight } from "react-native";
-// import dataEvents from '../../utils/dummyData/eventList.json';
-// import dataIOTDevicesConfig from '../../utils/dummyData/managementIOTDeviceConfig.json';
-// import cameraDevices from '../../utils/dummyData/managementCameraDevice.json';
-// import iotDevices from '../../utils/dummyData/managementIOTDevice.json';
-// import dataEventsType from '../../utils/dummyData/configurationEventType.json';
 import { useEffect, useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { styles } from "./styles";
@@ -27,7 +22,7 @@ import { mapperEventsUtils } from "../../utils/mapper/mapperEvents";
 import { useCallback } from "react";
 import { CameraTypeAPI } from "../../apis/CameraTypeAPI";
 import * as socket from "socket.io-client";
-import { BASE_URL, SOCKET_URL } from "../../constants/server";
+import { config } from "../../apis/configs/config";
 import notifee from '@notifee/react-native';
 
 
@@ -120,6 +115,8 @@ export default function Event({ navigation }) {
                                                         // let mapperEvents = mapperListEventDetailFromDatabaseToFE(events)     // need to remove EventAPI get all
                                                         let mapperEvents = mapperListEventDetailFromDatabaseToFE(events, mapperIoTConfigs)
 
+                                                        console.log("hello")
+
                                                         newSeries = [iotMaps.length, cameraMaps.length]
 
 
@@ -135,6 +132,7 @@ export default function Event({ navigation }) {
                                                         let sortedEvents = sortEventOnCreatedAt(currentEventsList);
                                                         setEventsForFlatList(sortedEvents)
                                                         setFirstFetch(false);
+                                                        dispatch(getEventsList(sortedEvents));
 
                                                         if (noti) {
                                                             onDisplayNotification(sortedEvents[0]);
@@ -231,7 +229,8 @@ export default function Event({ navigation }) {
     const handleSearchEventsList = () => {
 
 
-        onRefreshEffect();
+        // onRefreshEffect();
+        onRefresh();
 
 
         console.log(convertDate(startDate))
@@ -391,6 +390,7 @@ export default function Event({ navigation }) {
 
 
         if (firstFetch) {
+            console.log("first fetch again")
             let areas = [], buildings = [], floors = [], iotMaps = [], cameraMaps = [], events = [], eventTypes = [], newSeries = [], iotConfigs = [], cameraConfigs = [], iotTypes = [], cameraTypes = [];
 
             AreaAPI.getAll().then(res => {
@@ -455,6 +455,7 @@ export default function Event({ navigation }) {
                                                         let sortedEvents = sortEventOnCreatedAt(currentEventsList);
                                                         setEventsForFlatList(sortedEvents)
                                                         setFirstFetch(false);
+                                                        dispatch(getEventsList(sortedEvents));
                                                     })
 
                                                 })
@@ -469,9 +470,8 @@ export default function Event({ navigation }) {
             })
         }
 
-
         if (!connectSocket) {
-            setIo(socket.connect(SOCKET_URL));
+            setIo(socket.connect(config.BASE_URL, { path: config.BASE_URL_PATH + "/socket.io" }));
             setConnectSocket(true);
         }
 
@@ -505,6 +505,7 @@ export default function Event({ navigation }) {
 
 
     }, [eventsListRedux, refreshing, eventsForFlatList, firstFetch]);
+    // }, [firstFetch]);
 
 
     return (
@@ -603,8 +604,8 @@ export default function Event({ navigation }) {
 
             <FlatList
                 style={styles.flatListStyle}
-                data={eventsForFlatList}
-                // data={eventsListRedux}
+                // data={eventsForFlatList}
+                data={eventsListRedux}
                 renderItem={({ item, index }) => {
                     return (FlatListItem(item, index));
                 }}

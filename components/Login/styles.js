@@ -1,4 +1,4 @@
-import {StyleSheet} from "react-native";
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
     appContainer: {
@@ -91,7 +91,8 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         display: 'flex',
-        backgroundColor: 'red'
+        backgroundColor: 'red',
+        marginTop: 40,
     },
 
 

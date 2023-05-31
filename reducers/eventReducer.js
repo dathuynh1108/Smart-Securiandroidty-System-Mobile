@@ -27,7 +27,7 @@ const eventSlice = createSlice({
             let currentEvents = state.eventsList;
             console.log("action.payload confirm status: ", action.payload);
             currentEvents = currentEvents.map((event, idx) => {
-                if (event.id == action.payload.id || event._id == action.payload.id) {
+                if (event.id == action.payload._id || event._id == action.payload._id) {
                     event.event_status = "human_verified";
                     return event;
                 } else {
@@ -41,7 +41,8 @@ const eventSlice = createSlice({
             let currentEvents = state.eventsList;
             console.log("action.payload comment: ", action.payload);
             currentEvents = currentEvents.map((event, idx) => {
-                if (event.id == action.payload.id || event._id == action.payload.id) {
+                if (event.id == action.payload._id || event._id == action.payload._id) {
+                    event.human_true_alarm = action.payload.human_true_alarm;
                     event.comment = action.payload.comment;
                     return event;
                 } else {

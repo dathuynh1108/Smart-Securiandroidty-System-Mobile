@@ -7,7 +7,7 @@ import VideoView from "../VideoView";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCommentEvent, updateConfirmStatusEvent } from '../../reducers/eventReducer';
 import VideoEvent from "../VideoEvent";
-import { IP_ADDRESS, ip_global } from "../../apis/configs/axiosConfig";
+import { EventAPI } from "../../apis/EventAPI";
 
 export default function EventDetail({ navigation, route }) {
     // console.log("route params: ", route.params)
@@ -22,8 +22,16 @@ export default function EventDetail({ navigation, route }) {
     const handleConfirmEditResponse = (e) => {
         /* call API to confirm comment of event */
 
-        dispatch(updateCommentEvent({ ...eventDetailInfo, "comment": eventComment }));
-        setEventDetailInfo({ ...eventDetailInfo, "comment": eventComment });
+        let objForSave = { ...eventDetailInfo, "comment": eventComment, "human_true_alarm": trueAlarmRadio == "true" ? true : false };
+        console.log("objForSave update COMMENT event: ", objForSave)
+        EventAPI.update(objForSave).then(res => {
+            console.log("update COMMENT success")
+            dispatch(updateCommentEvent({ ...eventDetailInfo, "comment": eventComment, "human_true_alarm": trueAlarmRadio == "true" ? true : false }));
+            setEventDetailInfo({ ...eventDetailInfo, "comment": eventComment, "human_true_alarm": trueAlarmRadio == "true" ? true : false });
+        })
+
+        // dispatch(updateCommentEvent({ ...eventDetailInfo, "comment": eventComment }));
+        // setEventDetailInfo({ ...eventDetailInfo, "comment": eventComment });
 
         setDisabledResponse(!disabledResponse);
     }
@@ -37,6 +45,13 @@ export default function EventDetail({ navigation, route }) {
     const handleConfirmStatusEvent = (e) => {
         /* call api update status event */
 
+        let objForSave = { ...eventDetailInfo, "event_status": "human_verified", "comment": eventDetailInfo.comment ? eventDetailInfo.comment : "" };
+        console.log("objForSave update event: ", objForSave)
+        EventAPI.update(objForSave).then(res => {
+            console.log("update success")
+            dispatch(updateConfirmStatusEvent({ ...eventDetailInfo, "event_status": "human_verified" }));
+            setEventDetailInfo({ ...eventDetailInfo, "event_status": "human_verified" });
+        })
 
         // dispatch(updateConfirmStatusEvent({ ...eventDetailInfo, "confirm_status": "done" }))
         // setEventDetailInfo({ ...eventDetailInfo, "confirm_status": "done" })
@@ -44,8 +59,8 @@ export default function EventDetail({ navigation, route }) {
         // dispatch(updateConfirmStatusEvent({ ...eventDetailInfo, "confirm_status": "human_verified" }));
         // setEventDetailInfo({ ...eventDetailInfo, "confirm_status": "human_verified" });
 
-        dispatch(updateConfirmStatusEvent({ ...eventDetailInfo, "event_status": "human_verified" }));
-        setEventDetailInfo({ ...eventDetailInfo, "event_status": "human_verified" });
+        // dispatch(updateConfirmStatusEvent({ ...eventDetailInfo, "event_status": "human_verified" }));
+        // setEventDetailInfo({ ...eventDetailInfo, "event_status": "human_verified" });
 
         // dispatch(updateConfirmStatusEvent({}));
         console.log("handle confirm status");
@@ -60,11 +75,8 @@ export default function EventDetail({ navigation, route }) {
             console.log("route.params: ", route.params)
             setEventDetailInfo(route.params);
             setEventDetailInfoOriginal(route.params);
-            // setTrueAlarmRadio(route.params.true_alarm ? 'true' : 'false');
             setTrueAlarmRadio(route.params.human_true_alarm ? 'true' : 'false');
             setEventComment(route.params.comment);
-            // console.log("comment of event: ", route.params.comment)
-
             setFirstFetch(false);
         }
     }, [route.params, eventDetailInfo])
@@ -72,7 +84,7 @@ export default function EventDetail({ navigation, route }) {
 
     return (
         <ScrollView style={{ marginLeft: 5, marginRight: 5 }}>
-            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            {/* <KeyboardAvoidingView behavior={PJlatform.OS === 'ios' ? 'padding' : 'height'}> */}
                 <View style={styles.eventDetailBlock}>
                     <Text style={styles.eventDetailLeft}>Mã số:</Text>
                     <Text style={styles.eventDetailRight}>{eventDetailInfo.id}</Text>
@@ -129,7 +141,7 @@ export default function EventDetail({ navigation, route }) {
                         // source={{ uri: 'https://media.istockphoto.com/id/621984692/photo/traffic-security-camera.jpg?s=612x612&w=0&k=20&c=w1TrTBvor2fNfBPxfFpuTm5fShzkuHgRoVVUJcTK1sA=', }}
                         // source={{ uri: 'https://scontent.xx.fbcdn.net/v/t1.15752-9/344289776_256146703543999_2352939010781704110_n.png?stp=dst-png_p206x206&_nc_cat=101&ccb=1-7&_nc_sid=aee45a&_nc_ohc=vWV8s4JXthgAX_jEiar&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdQtM-bKXdsXOF4mD4Szm2dShE9eJFK2gPrSFiJDUHuoRA&oe=647F0F6F', }}
                         // source={{ uri: 'http://192.168.10.103:5005/static/general/image/20230519-154622-d81c69f21949456e8fe76744e9669965.jpg', }}
-                        source={{ uri: eventDetailInfo.normal_image_url ? eventDetailInfo.normal_image_url.replace('localhost', ip_global).replace('undefined', ip_global) : '', }}
+                        source={{ uri: eventDetailInfo.normal_image_url ? eventDetailInfo.normal_image_url : '', }}
                     />
 
                     {/* <Image
@@ -153,7 +165,7 @@ export default function EventDetail({ navigation, route }) {
                         // source={{ uri: 'https://media.istockphoto.com/id/621984692/photo/traffic-security-camera.jpg?s=612x612&w=0&k=20&c=w1TrTBvor2fNfBPxfFpuTm5fShzkuHgRoVVUJcTK1sA=', }}
                         // source={{ uri: 'https://scontent.xx.fbcdn.net/v/t1.15752-9/344289776_256146703543999_2352939010781704110_n.png?stp=dst-png_p206x206&_nc_cat=101&ccb=1-7&_nc_sid=aee45a&_nc_ohc=vWV8s4JXthgAX_jEiar&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdQtM-bKXdsXOF4mD4Szm2dShE9eJFK2gPrSFiJDUHuoRA&oe=647F0F6F', }}
                         // source={{ uri: 'http://192.168.10.103:5005/static/general/image/20230519-154622-d81c69f21949456e8fe76744e9669965.jpg', }}
-                        source={{ uri: eventDetailInfo.detection_image_url?.replace('localhost', ip_global).replace('undefined', ip_global), }}
+                        source={{ uri: eventDetailInfo.detection_image_url }}
                     />
 
                     {/* <Image
@@ -189,7 +201,7 @@ export default function EventDetail({ navigation, route }) {
 
                 {
                     eventDetailInfo?.normal_video_url ?
-                        <VideoEvent video_url={eventDetailInfo.normal_video_url?.replace('localhost', ip_global).replace('undefined', ip_global)} />
+                        <VideoEvent video_url={eventDetailInfo.normal_video_url} />
                         :
                         ''
                 }
@@ -210,7 +222,7 @@ export default function EventDetail({ navigation, route }) {
 
                 {
                     eventDetailInfo?.detection_video_url ?
-                        <VideoEvent video_url={eventDetailInfo.detection_video_url?.replace('localhost', ip_global).replace('undefined', ip_global)} />
+                        <VideoEvent video_url={eventDetailInfo.detection_video_url} />
                         :
                         ''
                 }
@@ -244,7 +256,7 @@ export default function EventDetail({ navigation, route }) {
                 <TextInput
                     editable={!disabledResponse}
                     multiline
-                    numberOfLines={4}
+                    numberOfLines={10}
                     maxLength={60}
                     onChangeText={text => setEventComment(text)}
                     value={eventComment}
@@ -264,7 +276,7 @@ export default function EventDetail({ navigation, route }) {
                     </View>
                 }
 
-            </KeyboardAvoidingView>
+            {/* </KeyboardAvoidingView> */}
         </ScrollView>
     );
 }

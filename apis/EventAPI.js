@@ -11,7 +11,7 @@ export const EventAPI = {
 
     update: async function (item, cancel = false) {
         const response = await api.request({
-            url: ``,
+            url: `/api/events/${item._id}`,
             method: "PUT",
             data: item,
         })
