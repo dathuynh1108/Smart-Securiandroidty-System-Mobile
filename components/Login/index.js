@@ -29,51 +29,51 @@ export default function Login({ navigation }) {
     }
     const handleLogin = async () => {
         // check account
-        // let usernameParam = email;
-        // let passwordParam = password;
-        // return await LoginAPI.login({ "username": usernameParam, "password": passwordParam }).then(res => {
-        //     if (!res) {
-        //         console.log("cac")
-        //         setTrueAuthen(false)
-        //         return null;
-        //     } else {
-        //         if (res.data.user_detail.token && res.data.user_detail.role == 'supervisor') {
-        //             console.log("have token API: ", res.data.user_detail)
-        //             navigation.dispatch(state => {
-        //                 return CommonActions.reset({
-        //                     index: 0,
-        //                     routes: [{
-        //                         name: 'Welcome',
-        //                     }]
-        //                 })
-        //             })
-        //         } else {
-        //             setTrueAuthen(false)
-        //             return null;
-        //         }
-        //     }
-        // })
-
-        navigation.dispatch(state => {
-            return CommonActions.reset({
-                index: 0,
-                routes: [{
-                    name: 'Welcome',
-                    // state: {
-                    //     routes: [{
-                    //         name: 'MainTabScreen',
-                    //         state: {
-                    //             routes: [{
-                    //                 name: 'Dashboard',
-                    //                 params: {}
-                    //             }]
-                    //         }
-                    //     }]
-                    // }
-
-                }]
-            })
+        let usernameParam = email;
+        let passwordParam = password;
+        return await LoginAPI.login({ "username": usernameParam, "password": passwordParam }).then(res => {
+            if (!res) {
+                console.log("cac")
+                setTrueAuthen(false)
+                return null;
+            } else {
+                if (res.data.user_detail.token && res.data.user_detail.role == 'supervisor') {
+                    console.log("have token API: ", res.data.user_detail)
+                    navigation.dispatch(state => {
+                        return CommonActions.reset({
+                            index: 0,
+                            routes: [{
+                                name: 'Welcome',
+                            }]
+                        })
+                    })
+                } else {
+                    setTrueAuthen(false)
+                    return null;
+                }
+            }
         })
+
+        // navigation.dispatch(state => {
+        //     return CommonActions.reset({
+        //         index: 0,
+        //         routes: [{
+        //             name: 'Welcome',
+        //             // state: {
+        //             //     routes: [{
+        //             //         name: 'MainTabScreen',
+        //             //         state: {
+        //             //             routes: [{
+        //             //                 name: 'Dashboard',
+        //             //                 params: {}
+        //             //             }]
+        //             //         }
+        //             //     }]
+        //             // }
+
+        //         }]
+        //     })
+        // })
     }
 
     return (
