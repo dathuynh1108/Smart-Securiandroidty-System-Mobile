@@ -1,5 +1,5 @@
 import { Button, Text, View, FlatList, TouchableOpacity, ScrollView, Platform, TouchableHighlight } from "react-native";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { styles } from "./styles";
 import { TextInput } from "react-native-paper";
@@ -21,8 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { mapperEventsUtils } from "../../utils/mapper/mapperEvents";
 import { useCallback } from "react";
 import { CameraTypeAPI } from "../../apis/CameraTypeAPI";
-import * as socket from "socket.io-client";
-import { config } from "../../apis/configs/config";
+import { connectSocketIO } from "../../apis/configs/axiosConfig";
 import notifee from '@notifee/react-native';
 
 
@@ -361,7 +360,7 @@ export default function Event({ navigation }) {
 
 
 
-    const [connectSocket, setConnectSocket] = useState(false);
+    const connectSocket = useRef(false);
     const [firstFetch, setFirstFetch] = useState(true);
     const [io, setIo] = useState(null);
     const [idEvents, setIdEvents] = useState({});
@@ -470,9 +469,9 @@ export default function Event({ navigation }) {
             })
         }
 
-        if (!connectSocket) {
-            setIo(socket.connect(config.BASE_URL, { path: config.BASE_URL_PATH + "/socket.io" }));
-            setConnectSocket(true);
+        if (!connectSocket.current) {
+          setIo(connectSocketIO());
+          connectSocket.current = true;
         }
 
 

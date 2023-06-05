@@ -1,8 +1,20 @@
 import axios from "axios"
 import {config} from "./config"
+import * as socket from "socket.io-client";
+
 export const api = axios.create({
     baseURL: config.BASE_URL + config.BASE_URL_PATH,
 })
+
+export function connectSocketIO() {
+    return socket.connect(
+        config.BASE_URL, 
+        {
+            path: config.BASE_URL_PATH + "/socket.io",
+            transports: ["websocket"],
+        }
+    );
+}
 
 // defining a custom error handler for all APIs
 const errorHandler = (error) => {
