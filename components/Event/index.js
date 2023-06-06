@@ -442,18 +442,18 @@ export default function Event({ navigation }) {
                                                         newSeries = [iotMaps.length, cameraMaps.length]
 
 
-                                                        setAreasList(mapperAreas);
-                                                        setBuildingsList(mapperBuildings);
-                                                        setFloorsList(mapperFloors)
-                                                        setIotDevices(mapperIoTMaps);           // map
-                                                        setCameraDevices(mapperCameraMaps);     // map
-                                                        setEventTypes(eventTypes);
-                                                        setIotConfigurations(mapperIoTConfigs);
-                                                        setIotsType(mapperIoTTypes)
+                                                        // setAreasList(mapperAreas);
+                                                        // setBuildingsList(mapperBuildings);
+                                                        // setFloorsList(mapperFloors)
+                                                        // setIotDevices(mapperIoTMaps);           // map
+                                                        // setCameraDevices(mapperCameraMaps);     // map
+                                                        // setEventTypes(eventTypes);
+                                                        // setIotConfigurations(mapperIoTConfigs);
+                                                        // setIotsType(mapperIoTTypes)
                                                         let currentEventsList = mapperEventsUtils(mapperEvents, mapperIoTConfigs, eventTypes, mapperIoTMaps, mapperCameraMaps, mapperAreas, mapperBuildings, mapperFloors, mapperIoTTypes, mapperEvents.length, mapperCameraConfigs, cameraTypes);
                                                         let sortedEvents = sortEventOnCreatedAt(currentEventsList);
                                                         setEventsForFlatList(sortedEvents)
-                                                        setFirstFetch(false);
+                                                        setFirstFetch(prev => false);
                                                         dispatch(getEventsList(sortedEvents));
                                                     })
 
@@ -470,8 +470,8 @@ export default function Event({ navigation }) {
         }
 
         if (!connectSocket.current) {
-          setIo(connectSocketIO());
-          connectSocket.current = true;
+            setIo(connectSocketIO());
+            connectSocket.current = true;
         }
 
 
@@ -504,6 +504,7 @@ export default function Event({ navigation }) {
 
 
     }, [eventsListRedux, refreshing, eventsForFlatList, firstFetch]);
+    // }, [refreshing, eventsForFlatList]);
     // }, [firstFetch]);
 
 

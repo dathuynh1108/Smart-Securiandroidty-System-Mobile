@@ -185,7 +185,7 @@ export default function MonitorVideoPTZ({ route, navigation }) {
         }}>
             {/* <Text>video ptz</Text> */}
 
-            <VideoViewLivestream roomName={route.params.current} />
+            <VideoViewLivestream page="No" roomName={route.params.current} />
 
             <View style={{
 

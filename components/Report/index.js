@@ -108,7 +108,7 @@ export default function Report({ navigation }) {
                             allStatisticsCount = res.data;
 
                             let newParam = {
-                                'area_id': areas[0]._id,
+                                'area_id': areas[0]? areas[0]._id : '',
                                 'start_time': '2023-01-01T03:38:17.904Z',
                                 'end_time': '2023-12-31T05:38:17.904Z'
                             }
@@ -292,7 +292,8 @@ export default function Report({ navigation }) {
                         allStatisticsCount = res.data;
 
                         let newParam = {
-                            'area_id': areas[0]._id,
+                            // 'area_id': areas[0]._id,
+                            'area_id': areas[0]? areas[0]._id : '',
                             'start_time': '2023-01-01T03:38:17.904Z',
                             'end_time': '2023-12-31T05:38:17.904Z'
                         }
@@ -308,10 +309,11 @@ export default function Report({ navigation }) {
                                     iotTypes = res.data.iot_device_types;
 
                                     let newParamLineChart = {
-                                        'area_id': areas[0]._id,
+                                        // 'area_id': areas[0]._id,
+                                        'area_id': areas[0]? areas[0]._id : '',
                                         'start_time': '2023-01-01T03:38:17.904Z',
                                         'end_time': '2023-12-31T05:38:17.904Z',
-                                        'iot_device_type_id': iotTypes[0]._id,
+                                        'iot_device_type_id': iotTypes[0] ? iotTypes[0]._id : '',
                                         'interval_type': 'date',
                                     }
 

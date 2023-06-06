@@ -122,7 +122,7 @@ export default function Welcome({ navigation }) {
             <Tab.Screen name="MonitorVideo" component={MonitorVideo} options={{ title: "MonitorVideo" }} />
             <Tab.Screen name="Event" component={Event} options={{ title: "Event" }} />
             <Tab.Screen name="Report" component={Report} options={{ title: "Report" }} />
-            <Tab.Screen name="Configuration" component={Configuration} options={{ title: "Configuration" }} />
+            {/* <Tab.Screen name="Configuration" component={Configuration} options={{ title: "Configuration" }} /> */}
             {/*<Tab.Screen name="Profile" component={Report} options={{ title: "Profile" }} />*/}
             {/* <Tab.Screen name="Notifications" component={Notifications} options={{ title: "Notifications" }} /> */}
             <Tab.Screen name="Personal" component={Personal} options={{ title: "Personal" }} />

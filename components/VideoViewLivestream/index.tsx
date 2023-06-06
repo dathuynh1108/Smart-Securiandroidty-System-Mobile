@@ -10,18 +10,19 @@ const pcConfig = {
     sdpSemantics: 'unified-plan',
     iceServers: [
         {
-          urls: "stun:stun.l.google.com:19302",
+            urls: "stun:stun.l.google.com:19302",
         },
         {
             urls: ['turn:smartss.click:3478'],
             username: 'dathuynh11082001',
             credential: 'dathuynh11082001',
-        }, 
+        },
     ],
 };
 export interface Props {
     navigation: any;
     roomName: string;
+    page: string;
 }
 
 const VideoView: React.FC<Props> = (props) => {
@@ -85,7 +86,9 @@ const VideoView: React.FC<Props> = (props) => {
                 <TouchableOpacity
                     onPress={() => {
                         console.log("press video")
-                        navigationInside.navigate('MonitorVideoPTZ', roomName)
+                        if (props.page == 'MonitorVideo') {
+                            navigationInside.navigate('MonitorVideoPTZ', roomName)
+                        }
                     }}
                 >
                     <RTCView

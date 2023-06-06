@@ -184,7 +184,7 @@ export default function MonitorVideo({ navigation }) {
           }
           <Text style={styles.cameraNameLeft}> <Text style={styles.titleBuildingAndFloor}>Tên camera: </Text> {video.camera_name}</Text>
 
-          <VideoViewLivestream navigation={navigation} roomName={video.sfu_rtsp_stream_url} />
+          <VideoViewLivestream page="MonitorVideo" navigation={navigation} roomName={video.sfu_rtsp_stream_url} />
 
           <View style={styles.bottomLine} />
         </View>

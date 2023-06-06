@@ -11,7 +11,7 @@ export const mapperEventsUtils = (items, iotConfigs, eventTypes, iotMaps, camera
         if (event.iot_device) {
             // console.log("HAVE IOT DEVICE FIELD: ", event)
 
-            let iot_config_name = '', iot_map_name = '', area_id = '', area_name = '', building_name = '', floor_name = '', address = '', iot_type_id = '', iot_type_name = '', event_type_id = '', event_name = '', area_obj = {}, building_id = '', floor_level = ''
+            let iot_config_name = '', iot_map_name = '', area_id = '', area_name = '', building_name = '', floor_name = '', address = '', iot_type_id = '', iot_type_name = '', event_type_id = '', event_name = '', area_obj = {}, building_id = '', floor_level = '', event_name1 = ''
             for (let i = 0; i < iotConfigs.length; i++) {
                 if (event.iot_device == iotConfigs[i].id) {
                     iot_config_name = iotConfigs[i].name;
@@ -41,6 +41,7 @@ export const mapperEventsUtils = (items, iotConfigs, eventTypes, iotMaps, camera
             for (let i = 0; i < eventTypes.length; i++) {
                 if (event_type_id == eventTypes[i].id || event_type_id == eventTypes[i]._id) {
                     event_name = eventTypes[i].event_name;
+                    event_name1 = eventTypes[i].event_name;
                     break;
                 }
             }
@@ -73,7 +74,8 @@ export const mapperEventsUtils = (items, iotConfigs, eventTypes, iotMaps, camera
 
             return {
                 ...event,
-                event_name,
+                // event_name,
+                event_name: event.event_name ? event.event_name : event_name1,
                 address,
                 device_name: iot_map_name,
                 iot_type_name,
@@ -97,7 +99,7 @@ export const mapperEventsUtils = (items, iotConfigs, eventTypes, iotMaps, camera
                 detection_image_url: event.detection_image_url ? event.detection_image_url.replace('locahost', IP_ADDRESS) : '',
             }
         } else {
-            let iot_config_name = '', iot_map_name = '', area_id = '', area_name = '', building_name = '', floor_name = '', address = '', iot_type_id = '', iot_type_name = '', event_type_id = '', event_name = '', area_obj = {}, building_id = '', floor_level = '', device_name = ''
+            let iot_config_name = '', iot_map_name = '', area_id = '', area_name = '', building_name = '', floor_name = '', address = '', iot_type_id = '', iot_type_name = '', event_type_id = '', event_name = '', area_obj = {}, building_id = '', floor_level = '', device_name = '', event_name1 = ''
             for (let i = 0; i < cameraMaps.length; i++) {
                 if (event.camera_map == cameraMaps[i]._id || event.camera_map == cameraMaps[i].id) {
                     area_id = cameraMaps[i].area_id;
@@ -126,6 +128,7 @@ export const mapperEventsUtils = (items, iotConfigs, eventTypes, iotMaps, camera
             for (let i = 0; i < eventTypes.length; i++) {
                 if (event_type_id == eventTypes[i]._id || event_type_id == eventTypes[i].id) {
                     event_name = eventTypes[i].event_name;
+                    event_name1 = eventTypes[i].event_name;
                     break;
                 }
             }
@@ -139,7 +142,8 @@ export const mapperEventsUtils = (items, iotConfigs, eventTypes, iotMaps, camera
 
             return {
                 ...event,
-                event_name,
+                // event_name,
+                event_name: event.event_name ? event.event_name : event_name1,
                 address,
                 device_name: device_name,
                 iot_type_name,
@@ -172,12 +176,13 @@ export const mapperEventsUtilsForDashboard = (items, iotConfigs, eventTypes, iot
     // console.log("data passed to MONITOR: ", items, iotConfigs, eventTypes, iotMaps, cameraMaps, areas, buildings, floors, iotTypes)
     if (!items) return [];
 
-    return items.slice(items.length - endIdx, items.length).map(event => {
+    // return items.slice(items.length - endIdx, items.length).map(event => {
+    return items.slice(0, 5).map(event => {
 
         if (event.iot_device) {
             // console.log("HAVE IOT DEVICE FIELD: ", event)
 
-            let iot_config_name = '', iot_map_name = '', area_id = '', area_name = '', building_name = '', floor_name = '', address = '', iot_type_id = '', iot_type_name = '', event_type_id = '', event_name = '', area_obj = {}, building_id = '', floor_level = ''
+            let iot_config_name = '', iot_map_name = '', area_id = '', area_name = '', building_name = '', floor_name = '', address = '', iot_type_id = '', iot_type_name = '', event_type_id = '', event_name = '', area_obj = {}, building_id = '', floor_level = '', event_name1 = ''
             for (let i = 0; i < iotConfigs.length; i++) {
                 if (event.iot_device == iotConfigs[i].id) {
                     iot_config_name = iotConfigs[i].name;
@@ -207,6 +212,7 @@ export const mapperEventsUtilsForDashboard = (items, iotConfigs, eventTypes, iot
             for (let i = 0; i < eventTypes.length; i++) {
                 if (event_type_id == eventTypes[i].id || event_type_id == eventTypes[i]._id) {
                     event_name = eventTypes[i].event_name;
+                    event_name1 = eventTypes[i].event_name;
                     break;
                 }
             }
@@ -239,7 +245,8 @@ export const mapperEventsUtilsForDashboard = (items, iotConfigs, eventTypes, iot
 
             return {
                 ...event,
-                event_name,
+                // event_name,
+                event_name: event.event_name ? event.event_name : event_name1,
                 address,
                 device_name: iot_map_name,
                 iot_type_name,
@@ -249,14 +256,14 @@ export const mapperEventsUtilsForDashboard = (items, iotConfigs, eventTypes, iot
                 floor_level,
                 area_name,
                 // created_at: new Date(event.created_at).toISOString(),
-                event_time: event.created_at ? new Date(event.created_at).toString() : "No time",
-                created_at: event.created_at ? new Date(event.created_at).toString() : "No time",
+                event_time: event.event_time ? new Date(event.event_time).toString() : "No time",
+                created_at: event.event_time ? new Date(event.event_time).toString() : "No time",
                 key: event._id,
 
                 video_url: event.detection_image_url ? event.detection_image_url : 'https://www.datasciencecentral.com/wp-content/uploads/2021/10/9712908078.jpeg'
             }
         } else {
-            let iot_config_name = '', iot_map_name = '', area_id = '', area_name = '', building_name = '', floor_name = '', address = '', iot_type_id = '', iot_type_name = '', event_type_id = '', event_name = '', area_obj = {}, building_id = '', floor_level = '', device_name = ''
+            let iot_config_name = '', iot_map_name = '', area_id = '', area_name = '', building_name = '', floor_name = '', address = '', iot_type_id = '', iot_type_name = '', event_type_id = '', event_name = '', area_obj = {}, building_id = '', floor_level = '', device_name = '', event_name1 = ''
             for (let i = 0; i < cameraMaps.length; i++) {
                 if (event.camera_map == cameraMaps[i]._id || event.camera_map == cameraMaps[i].id) {
                     area_id = cameraMaps[i].area_id;
@@ -285,6 +292,7 @@ export const mapperEventsUtilsForDashboard = (items, iotConfigs, eventTypes, iot
             for (let i = 0; i < eventTypes.length; i++) {
                 if (event_type_id == eventTypes[i]._id || event_type_id == eventTypes[i].id) {
                     event_name = eventTypes[i].event_name;
+                    event_name1 = eventTypes[i].event_name;
                     break;
                 }
             }
@@ -298,7 +306,8 @@ export const mapperEventsUtilsForDashboard = (items, iotConfigs, eventTypes, iot
 
             return {
                 ...event,
-                event_name,
+                // event_name,
+                event_name: event.event_name ? event.event_name : event_name1,
                 address,
                 device_name: device_name,
                 iot_type_name,
@@ -309,6 +318,7 @@ export const mapperEventsUtilsForDashboard = (items, iotConfigs, eventTypes, iot
                 area_name,
                 // created_at: new Date(event.created_at).toISOString(),
                 // created_at: new Date(event.event_time).toISOString(),
+                event_time: event.event_time ? new Date(event.event_time).toString() : "No time",
                 created_at: event.event_time ? new Date(event.event_time).toString() : "No time",
                 key: event._id,
 
